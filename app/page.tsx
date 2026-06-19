@@ -1,5 +1,7 @@
+"use client";
 import Link from "next/link";
 import { Logo } from "@/components/Logo";
+import { useState, useEffect } from "react";
 import {
   CheckCircle,
   Code2,
@@ -11,6 +13,8 @@ import {
   ArrowRight,
   Zap,
   Shield,
+  Sun,
+  Moon,
 } from "lucide-react";
 
 const features = [
@@ -54,6 +58,7 @@ const plans = [
     features: ["50 AI queries/month", "100 practice problems", "Basic analytics", "Community access"],
     cta: "Get started",
     highlight: false,
+    href: "/signup",
   },
   {
     name: "Pro",
@@ -69,6 +74,7 @@ const plans = [
     ],
     cta: "Start free trial",
     highlight: true,
+    href: "/signup",
   },
   {
     name: "Team",
@@ -83,6 +89,7 @@ const plans = [
     ],
     cta: "Contact sales",
     highlight: false,
+    href: "/signup",
   },
 ];
 
@@ -94,22 +101,47 @@ const stats = [
 ];
 
 export default function LandingPage() {
+  const [dark, setDark] = useState(false);
+
+  useEffect(() => {
+    setDark(document.documentElement.classList.contains("dark"));
+  }, []);
+
+  function toggleDark() {
+    const next = !dark;
+    setDark(next);
+    if (next) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }
+
   return (
-    <div className="flex flex-col min-h-screen bg-white text-gray-900">
+    <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", background: "var(--background)", color: "var(--foreground)" }}>
       {/* Navbar */}
-      <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/80 backdrop-blur-md">
-        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
+      <header style={{ position: "sticky", top: 0, zIndex: 50, borderBottom: "1px solid var(--border)", backgroundColor: "var(--background)", backdropFilter: "blur(12px)" }}>
+        <nav style={{ maxWidth: 1280, margin: "0 auto", padding: "0 1.5rem", height: "3.5rem", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <Logo size="sm" />
-          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-500">
-            <a href="#features" className="hover:text-gray-900 transition-colors">Features</a>
-            <a href="#pricing" className="hover:text-gray-900 transition-colors">Pricing</a>
-            <a href="#about" className="hover:text-gray-900 transition-colors">About</a>
+          <div className="hidden md:flex" style={{ alignItems: "center", gap: "2rem", fontSize: "0.875rem", fontWeight: 500, color: "var(--nav-link)" }}>
+            <a href="#features" style={{ textDecoration: "none", color: "inherit" }} onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "var(--nav-link-hover)")} onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "var(--nav-link)")}>Features</a>
+            <a href="#pricing" style={{ textDecoration: "none", color: "inherit" }} onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "var(--nav-link-hover)")} onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "var(--nav-link)")}>Pricing</a>
+            <a href="#about" style={{ textDecoration: "none", color: "inherit" }} onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "var(--nav-link-hover)")} onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "var(--nav-link)")}>About</a>
           </div>
-          <div className="flex items-center gap-3">
-            <Link href="/login" className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors px-3 py-1.5">
+          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+            <button
+              onClick={toggleDark}
+              style={{ color: "var(--muted-foreground)", background: "none", border: "none", cursor: "pointer", padding: "0.375rem", borderRadius: "0.375rem" }}
+              aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
+            >
+              {dark ? <Sun size={17} /> : <Moon size={17} />}
+            </button>
+            <Link href="/login" style={{ fontSize: "0.875rem", fontWeight: 500, color: "var(--foreground)", textDecoration: "none", padding: "0.375rem 0.75rem" }}>
               Sign in
             </Link>
-            <Link href="/signup" className="text-sm font-semibold bg-gray-900 text-white px-4 py-1.5 rounded-md hover:bg-gray-700 transition-colors">
+            <Link href="/signup" className="btn-primary" style={{ fontSize: "0.875rem", padding: "0.375rem 1rem" }}>
               Get started
             </Link>
           </div>
@@ -117,68 +149,65 @@ export default function LandingPage() {
       </header>
 
       {/* Hero */}
-      <section className="flex flex-col items-center justify-center text-center px-4 pt-24 pb-20 bg-gradient-to-b from-blue-50/60 to-white">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-200 bg-blue-50 text-blue-700 text-xs font-medium mb-6">
+      <section style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "6rem 1rem 5rem", background: "var(--background)" }}>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", padding: "0.25rem 0.75rem", borderRadius: "999px", border: "1px solid var(--brand-light)", background: "var(--brand-light)", color: "var(--brand-text)", fontSize: "0.75rem", fontWeight: 500, marginBottom: "1.5rem" }}>
           <Zap size={12} />
           AI-Powered Developer Platform
         </div>
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-gray-900 max-w-4xl leading-tight">
+        <h1 style={{ fontSize: "clamp(2rem, 5vw, 3.75rem)", fontWeight: 700, letterSpacing: "-0.02em", color: "var(--foreground)", maxWidth: "52rem", lineHeight: 1.15 }}>
           Code smarter. Learn faster.{" "}
-          <span className="text-blue-600">Get hired.</span>
+          <span style={{ color: "var(--brand)" }}>Get hired.</span>
         </h1>
-        <p className="mt-5 text-lg sm:text-xl text-gray-500 max-w-2xl leading-relaxed">
+        <p style={{ marginTop: "1.25rem", fontSize: "1.125rem", color: "var(--muted-foreground)", maxWidth: "40rem", lineHeight: 1.65 }}>
           VeriCode AI combines AI assistance, coding practice, structured learning, and progress
           analytics into one platform built for developers at every stage.
         </p>
-        <div className="mt-8 flex flex-col sm:flex-row items-center gap-3">
-          <Link
-            href="/signup"
-            className="inline-flex items-center gap-2 bg-gray-900 text-white font-semibold px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors text-sm"
-          >
+        <div style={{ marginTop: "2rem", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "center", gap: "0.75rem" }}>
+          <Link href="/signup" className="btn-primary" style={{ fontSize: "0.9375rem", padding: "0.75rem 1.5rem" }}>
             Start for free <ArrowRight size={15} />
           </Link>
-          <Link
-            href="/dashboard"
-            className="inline-flex items-center gap-2 text-sm font-medium text-gray-700 px-6 py-3 rounded-lg border border-gray-300 hover:border-gray-400 transition-colors"
-          >
+          <Link href="/dashboard" className="btn-outline" style={{ fontSize: "0.9375rem", padding: "0.75rem 1.5rem" }}>
             View dashboard demo
           </Link>
         </div>
-        <p className="mt-4 text-xs text-gray-400">No credit card required</p>
+        <p style={{ marginTop: "1rem", fontSize: "0.75rem", color: "var(--muted-foreground)" }}>No credit card required</p>
       </section>
 
       {/* Stats */}
-      <section className="border-y border-gray-200 bg-white py-12">
-        <div className="max-w-5xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+      <section style={{ borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)", background: "var(--card)", padding: "3rem 1rem" }}>
+        <div style={{ maxWidth: 900, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "2rem", textAlign: "center" }} className="md:grid-cols-4">
           {stats.map((s) => (
             <div key={s.label}>
-              <div className="text-3xl font-bold text-gray-900">{s.value}</div>
-              <div className="text-sm text-gray-500 mt-1">{s.label}</div>
+              <div style={{ fontSize: "1.875rem", fontWeight: 700, color: "var(--foreground)" }}>{s.value}</div>
+              <div style={{ fontSize: "0.875rem", color: "var(--muted-foreground)", marginTop: "0.25rem" }}>{s.label}</div>
             </div>
           ))}
         </div>
       </section>
 
       {/* Features */}
-      <section id="features" className="py-20 px-4 bg-gray-50">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-14">
-            <h2 className="text-3xl font-bold text-gray-900">Everything you need to grow</h2>
-            <p className="mt-3 text-gray-500 max-w-xl mx-auto">
+      <section id="features" style={{ padding: "5rem 1rem", background: "var(--muted)" }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: "3.5rem" }}>
+            <h2 style={{ fontSize: "1.875rem", fontWeight: 700, color: "var(--foreground)" }}>Everything you need to grow</h2>
+            <p style={{ marginTop: "0.75rem", color: "var(--muted-foreground)", maxWidth: 480, margin: "0.75rem auto 0" }}>
               A complete toolkit for developers to learn, practice, and get hired — all in one place.
             </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "1.25rem" }}>
             {features.map((f) => (
               <div
                 key={f.title}
-                className="p-6 rounded-xl border border-gray-200 bg-white hover:shadow-md transition-shadow"
+                className="card"
+                style={{ padding: "1.5rem", transition: "box-shadow 0.2s" }}
+                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.boxShadow = "0 4px 16px rgba(0,0,0,0.1)")}
+                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.boxShadow = "none")}
               >
-                <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center mb-4">
-                  <f.icon size={20} className="text-blue-600" />
+                <div style={{ width: 40, height: 40, borderRadius: "0.5rem", background: "var(--brand-light)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>
+                  <f.icon size={20} style={{ color: "var(--brand)" }} />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">{f.title}</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">{f.desc}</p>
+                <h3 style={{ fontWeight: 600, color: "var(--foreground)", marginBottom: "0.5rem" }}>{f.title}</h3>
+                <p style={{ fontSize: "0.875rem", color: "var(--muted-foreground)", lineHeight: 1.6 }}>{f.desc}</p>
               </div>
             ))}
           </div>
@@ -186,14 +215,24 @@ export default function LandingPage() {
       </section>
 
       {/* Company trust bar */}
-      <section id="about" className="py-14 px-4 bg-white">
-        <div className="max-w-5xl mx-auto text-center">
-          <p className="text-xs font-medium text-gray-400 uppercase tracking-widest mb-6">
+      <section id="about" style={{ padding: "3.5rem 1rem", background: "var(--background)" }}>
+        <div style={{ maxWidth: 900, margin: "0 auto", textAlign: "center" }}>
+          <p style={{ fontSize: "0.7rem", fontWeight: 600, color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: "1.5rem" }}>
             Practice questions from top companies
           </p>
-          <div className="flex flex-wrap justify-center gap-4">
+          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "0.75rem" }}>
             {["Google", "Amazon", "Microsoft", "TCS", "Infosys", "Adobe", "Meta", "Zoho", "Accenture", "Wipro"].map((c) => (
-              <span key={c} className="text-sm font-medium text-gray-400 px-3 py-1 border border-gray-200 rounded-full">
+              <span
+                key={c}
+                style={{
+                  fontSize: "0.8125rem",
+                  fontWeight: 500,
+                  color: "var(--muted-foreground)",
+                  padding: "0.25rem 0.75rem",
+                  border: "1px solid var(--border)",
+                  borderRadius: "999px",
+                }}
+              >
                 {c}
               </span>
             ))}
@@ -202,48 +241,61 @@ export default function LandingPage() {
       </section>
 
       {/* Pricing */}
-      <section id="pricing" className="py-20 px-4 bg-gray-50">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-14">
-            <h2 className="text-3xl font-bold text-gray-900">Simple, transparent pricing</h2>
-            <p className="mt-3 text-gray-500">Start free. Upgrade when you are ready.</p>
+      <section id="pricing" style={{ padding: "5rem 1rem", background: "var(--muted)" }}>
+        <div style={{ maxWidth: 900, margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: "3.5rem" }}>
+            <h2 style={{ fontSize: "1.875rem", fontWeight: 700, color: "var(--foreground)" }}>Simple, transparent pricing</h2>
+            <p style={{ marginTop: "0.75rem", color: "var(--muted-foreground)" }}>Start free. Upgrade when you are ready.</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "1.25rem" }}>
             {plans.map((p) => (
               <div
                 key={p.name}
-                className={`rounded-xl border p-6 flex flex-col ${
-                  p.highlight
-                    ? "border-blue-600 bg-blue-600 text-white"
-                    : "border-gray-200 bg-white"
-                }`}
+                style={{
+                  borderRadius: "0.75rem",
+                  border: p.highlight ? "2px solid var(--brand)" : "1px solid var(--card-border)",
+                  padding: "1.5rem",
+                  display: "flex",
+                  flexDirection: "column",
+                  background: p.highlight ? "var(--brand)" : "var(--card)",
+                  color: p.highlight ? "#fff" : "var(--foreground)",
+                }}
               >
-                <div className="mb-4">
-                  <div className={`text-sm font-medium mb-1 ${p.highlight ? "text-blue-100" : "text-gray-500"}`}>
+                <div style={{ marginBottom: "1rem" }}>
+                  <div style={{ fontSize: "0.875rem", fontWeight: 500, color: p.highlight ? "rgba(255,255,255,0.75)" : "var(--muted-foreground)", marginBottom: "0.25rem" }}>
                     {p.name}
                   </div>
-                  <div className={`text-3xl font-bold ${p.highlight ? "text-white" : "text-gray-900"}`}>
+                  <div style={{ fontSize: "1.875rem", fontWeight: 700 }}>
                     {p.price}
-                    <span className={`text-sm font-normal ml-1 ${p.highlight ? "text-blue-100" : "text-gray-400"}`}>
+                    <span style={{ fontSize: "0.875rem", fontWeight: 400, marginLeft: "0.25rem", opacity: 0.7 }}>
                       /{p.period}
                     </span>
                   </div>
                 </div>
-                <ul className="flex-1 space-y-2.5 mb-6">
+                <ul style={{ flex: 1, marginBottom: "1.5rem", display: "flex", flexDirection: "column", gap: "0.625rem" }}>
                   {p.features.map((f) => (
-                    <li key={f} className="flex items-center gap-2 text-sm">
-                      <CheckCircle size={14} className={p.highlight ? "text-blue-200" : "text-green-500"} />
-                      <span className={p.highlight ? "text-blue-50" : "text-gray-600"}>{f}</span>
+                    <li key={f} style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "0.875rem" }}>
+                      <CheckCircle size={14} style={{ color: p.highlight ? "rgba(255,255,255,0.7)" : "#22c55e", flexShrink: 0 }} />
+                      <span style={{ color: p.highlight ? "rgba(255,255,255,0.9)" : "var(--muted-foreground)" }}>{f}</span>
                     </li>
                   ))}
                 </ul>
                 <Link
-                  href="/signup"
-                  className={`text-center text-sm font-semibold px-4 py-2.5 rounded-lg transition-colors ${
-                    p.highlight
-                      ? "bg-white text-blue-600 hover:bg-blue-50"
-                      : "bg-gray-900 text-white hover:bg-gray-700"
-                  }`}
+                  href={p.href}
+                  style={{
+                    display: "block",
+                    textAlign: "center",
+                    fontSize: "0.875rem",
+                    fontWeight: 600,
+                    padding: "0.625rem 1rem",
+                    borderRadius: "0.5rem",
+                    textDecoration: "none",
+                    background: p.highlight ? "#fff" : "var(--primary)",
+                    color: p.highlight ? "var(--brand)" : "var(--primary-foreground)",
+                    transition: "opacity 0.15s",
+                  }}
+                  onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.opacity = "0.88")}
+                  onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.opacity = "1")}
                 >
                   {p.cta}
                 </Link>
@@ -254,16 +306,17 @@ export default function LandingPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 px-4 bg-gray-900 text-white text-center">
-        <div className="max-w-2xl mx-auto">
-          <Shield size={32} className="mx-auto mb-4 text-blue-400" />
-          <h2 className="text-3xl font-bold mb-3">Ready to level up your coding?</h2>
-          <p className="text-gray-400 mb-8">
+      <section style={{ padding: "5rem 1rem", background: dark ? "#0a0a0f" : "#0f172a", color: "#fff", textAlign: "center" }}>
+        <div style={{ maxWidth: 600, margin: "0 auto" }}>
+          <Shield size={32} style={{ margin: "0 auto 1rem", color: "#60a5fa" }} />
+          <h2 style={{ fontSize: "1.875rem", fontWeight: 700, marginBottom: "0.75rem" }}>Ready to level up your coding?</h2>
+          <p style={{ color: "rgba(255,255,255,0.55)", marginBottom: "2rem" }}>
             Join thousands of developers who use VeriCode AI to practice, learn, and land their dream job.
           </p>
           <Link
             href="/signup"
-            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold px-8 py-3 rounded-lg transition-colors text-sm"
+            className="btn-brand"
+            style={{ fontSize: "0.9375rem", padding: "0.75rem 2rem" }}
           >
             Get started for free <ArrowRight size={15} />
           </Link>
@@ -271,14 +324,16 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-gray-200 bg-white py-10 px-4">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      <footer style={{ borderTop: "1px solid var(--border)", background: "var(--card)", padding: "2.5rem 1.5rem" }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto", display: "flex", flexDirection: "column", alignItems: "center", gap: "1rem" }} className="md:flex-row md:justify-between">
           <Logo size="sm" />
-          <p className="text-xs text-gray-400">2026 VeriCode AI. All rights reserved.</p>
-          <div className="flex items-center gap-6 text-xs text-gray-400">
-            <a href="#" className="hover:text-gray-600">Privacy</a>
-            <a href="#" className="hover:text-gray-600">Terms</a>
-            <a href="#" className="hover:text-gray-600">Contact</a>
+          <p style={{ fontSize: "0.75rem", color: "var(--muted-foreground)" }}>2026 VeriCode AI. All rights reserved.</p>
+          <div style={{ display: "flex", alignItems: "center", gap: "1.5rem", fontSize: "0.75rem" }}>
+            {["Privacy", "Terms", "Contact"].map((item) => (
+              <a key={item} href="#" style={{ color: "var(--muted-foreground)", textDecoration: "none" }} onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "var(--foreground)")} onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "var(--muted-foreground)")}>
+                {item}
+              </a>
+            ))}
           </div>
         </div>
       </footer>

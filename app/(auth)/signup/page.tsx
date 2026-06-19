@@ -1,11 +1,12 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Logo } from "@/components/Logo";
-import { Eye, EyeOff, AlertCircle, CheckCircle } from "lucide-react";
+import { Eye, EyeOff, AlertCircle, CheckCircle, Sun, Moon } from "lucide-react";
+import { useRouter } from "next/navigation";
 
-// API_KEY: POST /api/auth/signup — body: { name, email, password, skillLevel, language, goal }
 export default function SignupPage() {
+  const router = useRouter();
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({
     name: "",
@@ -18,6 +19,23 @@ export default function SignupPage() {
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [dark, setDark] = useState(false);
+
+  useEffect(() => {
+    setDark(document.documentElement.classList.contains("dark"));
+  }, []);
+
+  function toggleDark() {
+    const next = !dark;
+    setDark(next);
+    if (next) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }
 
   function update(k: string, v: string) {
     setForm((p) => ({ ...p, [k]: v }));
@@ -26,20 +44,30 @@ export default function SignupPage() {
 
   async function handleStep1(e: React.FormEvent) {
     e.preventDefault();
-    if (!form.name || !form.email || !form.password) { setError("Please fill in all fields."); return; }
-    if (form.password.length < 8) { setError("Password must be at least 8 characters."); return; }
+    if (!form.name || !form.email || !form.password) {
+      setError("Please fill in all fields.");
+      return;
+    }
+    if (form.password.length < 8) {
+      setError("Password must be at least 8 characters.");
+      return;
+    }
     setStep(2);
   }
 
   async function handleStep2(e: React.FormEvent) {
     e.preventDefault();
-    if (!form.skillLevel || !form.language || !form.goal) { setError("Please complete your profile."); return; }
+    if (!form.skillLevel || !form.language || !form.goal) {
+      setError("Please complete your profile.");
+      return;
+    }
     setLoading(true);
     try {
-      // TODO (backend): replace with actual API call
-      // await fetch("/api/auth/signup", { method: "POST", body: JSON.stringify(form) });
-      await new Promise((r) => setTimeout(r, 800));
-      window.location.href = "/dashboard";
+      await new Promise((r) => setTimeout(r, 700));
+      // Persist user for login flow
+      localStorage.setItem("vericode_registered_user", JSON.stringify(form));
+      localStorage.setItem("vericode_user", JSON.stringify(form));
+      router.push("/dashboard");
     } catch {
       setError("Something went wrong. Please try again.");
     } finally {
@@ -51,122 +79,223 @@ export default function SignupPage() {
   const languages = ["Python", "JavaScript", "Java", "C++", "C", "TypeScript", "SQL"];
   const goals = ["Learning", "Interview prep", "Build projects", "AI coding help"];
 
+  const passwordStrength = form.password
+    ? [form.password.length >= 8, /[A-Z]/.test(form.password), /[0-9]/.test(form.password)]
+    : null;
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-4">
-      <div className="w-full max-w-sm">
-        <div className="flex flex-col items-center mb-8">
+    <div
+      style={{ background: "var(--muted)", minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "1rem" }}
+    >
+      {/* Theme toggle */}
+      <button
+        onClick={toggleDark}
+        style={{ color: "var(--muted-foreground)", position: "fixed", top: 16, right: 16 }}
+        className="p-2 rounded-lg transition-colors z-10"
+        aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
+        onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "var(--card-border)")}
+        onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "transparent")}
+      >
+        {dark ? <Sun size={18} /> : <Moon size={18} />}
+      </button>
+
+      <div style={{ width: "100%", maxWidth: 384 }}>
+        {/* Header */}
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: "2rem" }}>
           <Logo size="md" />
-          <h1 className="mt-5 text-2xl font-bold text-gray-900">Create your account</h1>
-          <div className="flex items-center gap-2 mt-3">
+          <h1 style={{ marginTop: "1.25rem", fontSize: "1.5rem", fontWeight: 700, color: "var(--foreground)" }}>
+            Create your account
+          </h1>
+          {/* Step indicator */}
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "0.75rem" }}>
             {[1, 2].map((n) => (
               <div
                 key={n}
-                className={`h-1.5 rounded-full transition-all ${n === step ? "w-8 bg-blue-600" : n < step ? "w-8 bg-green-500" : "w-4 bg-gray-300"}`}
+                style={{
+                  height: "6px",
+                  borderRadius: "3px",
+                  width: n === step ? "2rem" : n < step ? "2rem" : "1rem",
+                  background: n < step ? "#22c55e" : n === step ? "var(--brand)" : "var(--border)",
+                  transition: "all 0.2s ease",
+                }}
               />
             ))}
           </div>
+          <p style={{ fontSize: "0.75rem", color: "var(--muted-foreground)", marginTop: "0.5rem" }}>
+            Step {step} of 2
+          </p>
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+        <div className="auth-card">
           {error && (
-            <div className="mb-4 flex items-center gap-2 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg p-3">
-              <AlertCircle size={14} className="shrink-0" />
+            <div style={{
+              marginBottom: "1rem",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              fontSize: "0.875rem",
+              color: "var(--destructive)",
+              background: "rgba(239,68,68,0.08)",
+              border: "1px solid rgba(239,68,68,0.25)",
+              borderRadius: "0.5rem",
+              padding: "0.75rem",
+            }}>
+              <AlertCircle size={14} style={{ flexShrink: 0 }} />
               {error}
             </div>
           )}
 
           {step === 1 && (
-            <form onSubmit={handleStep1} className="space-y-4">
+            <form onSubmit={handleStep1} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Full name</label>
+                <label htmlFor="signup-name" style={{ display: "block", fontSize: "0.875rem", fontWeight: 500, color: "var(--foreground)", marginBottom: "0.375rem" }}>
+                  Full name
+                </label>
                 <input
+                  id="signup-name"
                   type="text"
                   value={form.name}
                   onChange={(e) => update("name", e.target.value)}
-                  placeholder="Your name"
-                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all"
+                  placeholder="Your full name"
+                  className="form-input"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Email</label>
+                <label htmlFor="signup-email" style={{ display: "block", fontSize: "0.875rem", fontWeight: 500, color: "var(--foreground)", marginBottom: "0.375rem" }}>
+                  Email
+                </label>
                 <input
+                  id="signup-email"
                   type="email"
                   value={form.email}
                   onChange={(e) => update("email", e.target.value)}
                   placeholder="you@example.com"
-                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all"
+                  className="form-input"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
-                <div className="relative">
+                <label htmlFor="signup-password" style={{ display: "block", fontSize: "0.875rem", fontWeight: 500, color: "var(--foreground)", marginBottom: "0.375rem" }}>
+                  Password
+                </label>
+                <div style={{ position: "relative" }}>
                   <input
+                    id="signup-password"
                     type={show ? "text" : "password"}
                     value={form.password}
                     onChange={(e) => update("password", e.target.value)}
                     placeholder="Min. 8 characters"
-                    className="w-full px-3 py-2 pr-10 text-sm border border-gray-300 rounded-lg outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all"
+                    className="form-input"
+                    style={{ paddingRight: "2.5rem" }}
                   />
-                  <button type="button" onClick={() => setShow(!show)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                  <button
+                    type="button"
+                    onClick={() => setShow(!show)}
+                    style={{ position: "absolute", right: "0.75rem", top: "50%", transform: "translateY(-50%)", color: "var(--muted-foreground)", background: "none", border: "none", cursor: "pointer" }}
+                  >
                     {show ? <EyeOff size={15} /> : <Eye size={15} />}
                   </button>
                 </div>
-                {form.password && (
-                  <div className="mt-1.5 flex items-center gap-1.5">
-                    {[form.password.length >= 8, /[A-Z]/.test(form.password), /[0-9]/.test(form.password)].map((ok, i) => (
-                      <div key={i} className={`flex-1 h-1 rounded-full ${ok ? "bg-green-500" : "bg-gray-200"}`} />
+                {passwordStrength && (
+                  <div style={{ marginTop: "0.375rem", display: "flex", alignItems: "center", gap: "0.375rem" }}>
+                    {passwordStrength.map((ok, i) => (
+                      <div key={i} style={{ flex: 1, height: 4, borderRadius: 2, background: ok ? "#22c55e" : "var(--border)", transition: "background 0.2s" }} />
                     ))}
-                    <span className="text-xs text-gray-400 ml-1">
-                      {form.password.length < 8 ? "Weak" : /[A-Z]/.test(form.password) && /[0-9]/.test(form.password) ? "Strong" : "Good"}
+                    <span style={{ fontSize: "0.7rem", color: "var(--muted-foreground)", marginLeft: "0.25rem", minWidth: "2.5rem" }}>
+                      {form.password.length < 8 ? "Weak" : passwordStrength.every(Boolean) ? "Strong" : "Good"}
                     </span>
                   </div>
                 )}
               </div>
-              <button type="submit" className="w-full bg-gray-900 text-white text-sm font-semibold py-2.5 rounded-lg hover:bg-gray-700 transition-colors">
+              <button id="signup-continue" type="submit" className="btn-primary" style={{ width: "100%", marginTop: "0.25rem" }}>
                 Continue
               </button>
             </form>
           )}
 
           {step === 2 && (
-            <form onSubmit={handleStep2} className="space-y-4">
-              <p className="text-sm font-medium text-gray-700 mb-2">Tell us about yourself</p>
+            <form onSubmit={handleStep2} style={{ display: "flex", flexDirection: "column", gap: "1.125rem" }}>
+              <p style={{ fontSize: "0.875rem", fontWeight: 500, color: "var(--foreground)" }}>Tell us about yourself</p>
+
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-2 uppercase tracking-wide">Skill level</label>
-                <div className="grid grid-cols-3 gap-2">
+                <label style={{ display: "block", fontSize: "0.7rem", fontWeight: 600, color: "var(--muted-foreground)", marginBottom: "0.5rem", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                  Skill level
+                </label>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "0.5rem" }}>
                   {skillLevels.map((s) => (
                     <button
-                      key={s} type="button"
+                      key={s}
+                      type="button"
                       onClick={() => update("skillLevel", s)}
-                      className={`py-2 text-xs font-medium rounded-lg border transition-colors ${form.skillLevel === s ? "border-blue-600 bg-blue-50 text-blue-700" : "border-gray-200 text-gray-600 hover:border-gray-300"}`}
+                      style={{
+                        padding: "0.5rem",
+                        fontSize: "0.8125rem",
+                        fontWeight: 500,
+                        borderRadius: "0.5rem",
+                        border: form.skillLevel === s ? "1.5px solid var(--brand)" : "1px solid var(--border)",
+                        background: form.skillLevel === s ? "var(--brand-light)" : "var(--card)",
+                        color: form.skillLevel === s ? "var(--brand-text)" : "var(--foreground)",
+                        cursor: "pointer",
+                        transition: "all 0.15s",
+                      }}
                     >
                       {s}
                     </button>
                   ))}
                 </div>
               </div>
+
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-2 uppercase tracking-wide">Primary language</label>
-                <div className="flex flex-wrap gap-2">
+                <label style={{ display: "block", fontSize: "0.7rem", fontWeight: 600, color: "var(--muted-foreground)", marginBottom: "0.5rem", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                  Primary language
+                </label>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
                   {languages.map((l) => (
                     <button
-                      key={l} type="button"
+                      key={l}
+                      type="button"
                       onClick={() => update("language", l)}
-                      className={`px-3 py-1.5 text-xs font-medium rounded-full border transition-colors ${form.language === l ? "border-blue-600 bg-blue-50 text-blue-700" : "border-gray-200 text-gray-600 hover:border-gray-300"}`}
+                      style={{
+                        padding: "0.375rem 0.75rem",
+                        fontSize: "0.8125rem",
+                        fontWeight: 500,
+                        borderRadius: "999px",
+                        border: form.language === l ? "1.5px solid var(--brand)" : "1px solid var(--border)",
+                        background: form.language === l ? "var(--brand-light)" : "var(--card)",
+                        color: form.language === l ? "var(--brand-text)" : "var(--foreground)",
+                        cursor: "pointer",
+                        transition: "all 0.15s",
+                      }}
                     >
                       {l}
                     </button>
                   ))}
                 </div>
               </div>
+
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-2 uppercase tracking-wide">Your goal</label>
-                <div className="space-y-2">
+                <label style={{ display: "block", fontSize: "0.7rem", fontWeight: 600, color: "var(--muted-foreground)", marginBottom: "0.5rem", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                  Your goal
+                </label>
+                <div style={{ display: "flex", flexDirection: "column", gap: "0.375rem" }}>
                   {goals.map((g) => (
                     <button
-                      key={g} type="button"
+                      key={g}
+                      type="button"
                       onClick={() => update("goal", g)}
-                      className={`w-full flex items-center justify-between px-3 py-2.5 text-sm rounded-lg border transition-colors ${form.goal === g ? "border-blue-600 bg-blue-50 text-blue-700" : "border-gray-200 text-gray-600 hover:border-gray-300"}`}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        padding: "0.625rem 0.75rem",
+                        fontSize: "0.875rem",
+                        borderRadius: "0.5rem",
+                        border: form.goal === g ? "1.5px solid var(--brand)" : "1px solid var(--border)",
+                        background: form.goal === g ? "var(--brand-light)" : "var(--card)",
+                        color: form.goal === g ? "var(--brand-text)" : "var(--foreground)",
+                        cursor: "pointer",
+                        transition: "all 0.15s",
+                        textAlign: "left",
+                      }}
                     >
                       {g}
                       {form.goal === g && <CheckCircle size={14} />}
@@ -174,11 +303,12 @@ export default function SignupPage() {
                   ))}
                 </div>
               </div>
-              <div className="flex gap-3 pt-1">
-                <button type="button" onClick={() => setStep(1)} className="flex-1 py-2.5 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+
+              <div style={{ display: "flex", gap: "0.75rem", marginTop: "0.25rem" }}>
+                <button type="button" onClick={() => setStep(1)} className="btn-outline" style={{ flex: 1 }}>
                   Back
                 </button>
-                <button type="submit" disabled={loading} className="flex-1 bg-gray-900 text-white text-sm font-semibold py-2.5 rounded-lg hover:bg-gray-700 transition-colors disabled:opacity-50">
+                <button id="signup-submit" type="submit" disabled={loading} className="btn-primary" style={{ flex: 1 }}>
                   {loading ? "Creating..." : "Create account"}
                 </button>
               </div>
@@ -186,16 +316,16 @@ export default function SignupPage() {
           )}
         </div>
 
-        <p className="mt-5 text-center text-sm text-gray-500">
+        <p style={{ marginTop: "1.25rem", textAlign: "center", fontSize: "0.875rem", color: "var(--muted-foreground)" }}>
           Already have an account?{" "}
-          <Link href="/login" className="text-blue-600 font-medium hover:text-blue-500">
+          <Link href="/login" style={{ color: "var(--brand)", fontWeight: 500 }}>
             Sign in
           </Link>
         </p>
-        <p className="mt-3 text-center text-xs text-gray-400">
+        <p style={{ marginTop: "0.75rem", textAlign: "center", fontSize: "0.75rem", color: "var(--muted-foreground)" }}>
           By signing up, you agree to our{" "}
-          <a href="#" className="underline hover:text-gray-600">Terms</a> and{" "}
-          <a href="#" className="underline hover:text-gray-600">Privacy Policy</a>.
+          <a href="#" style={{ textDecoration: "underline" }}>Terms</a> and{" "}
+          <a href="#" style={{ textDecoration: "underline" }}>Privacy Policy</a>.
         </p>
       </div>
     </div>

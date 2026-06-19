@@ -3,11 +3,15 @@ import { Topbar } from "@/components/layout/Topbar";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-50">
+    <div
+      style={{ display: "flex", height: "100vh", overflow: "hidden", background: "var(--muted)" }}
+    >
       <Sidebar />
-      <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
+      <div style={{ display: "flex", flexDirection: "column", flex: 1, minWidth: 0, overflow: "hidden" }}>
         <Topbar />
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6">{children}</main>
+        <main style={{ flex: 1, overflowY: "auto", padding: "1.25rem 1.5rem" }}>
+          {children}
+        </main>
       </div>
     </div>
   );
