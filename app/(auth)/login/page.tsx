@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Logo } from "@/components/Logo";
@@ -33,10 +33,10 @@ export default function LoginPage() {
     setDark(next);
     if (next) {
       document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
+      localStorage.setItem("vericode-theme", "dark");
     } else {
       document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
+      localStorage.setItem("vericode-theme", "light");
     }
   }
 
@@ -265,3 +265,4 @@ export default function LoginPage() {
     </div>
   );
 }
+

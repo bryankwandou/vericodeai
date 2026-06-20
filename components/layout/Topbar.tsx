@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { Bell, Search, Menu, Sun, Moon } from "lucide-react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -20,10 +20,10 @@ export function Topbar({ title }: TopbarProps) {
     setDark(next);
     if (next) {
       document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
+      localStorage.setItem("vericode-theme", "dark");
     } else {
       document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
+      localStorage.setItem("vericode-theme", "light");
     }
   }
 
@@ -104,3 +104,4 @@ export function Topbar({ title }: TopbarProps) {
     </header>
   );
 }
+
