@@ -1,0 +1,3922 @@
+    let isProfileLoaded = false;
+
+    let userProfileData = {
+      displayName: "ganeshabbu",
+      avatarId: 1,
+      gender: "",
+      location: "",
+      birthday: "",
+      github: "",
+      linkedin: "",
+      x: "",
+      readme: "",
+      bio: "",
+      education: "",
+      skills: "Python, JavaScript, C++, Secure Coding",
+      contactEmail: "user@vericode.ai",
+      contactPhone: ""
+    };
+
+    // Load persisted profile data
+    if (localStorage.getItem('vericode_profile')) {
+      try {
+        const loaded = JSON.parse(localStorage.getItem('vericode_profile'));
+        userProfileData = { ...userProfileData, ...loaded };
+      } catch (err) {
+        console.error("Error parsing profile data: ", err);
+      }
+    }
+    // 📚 LeetCode-style Practice Problems Logic
+    const practiceProblems = [
+      {
+        id: 1,
+        title: "Two Sum",
+        number: "1",
+        difficulty: "Easy",
+        acceptance: "50.1%",
+        topics: ["Array", "Hash Table"],
+        solved: true,
+        description: "Given an array of integers <code>nums</code> and an integer <code>target</code>, return indices of the two numbers such that they add up to <code>target</code>.<br><br>You may assume that each input would have exactly one solution, and you may not use the same element twice.",
+        example: "<strong>Input:</strong> nums = [2,7,11,15], target = 9<br><strong>Output:</strong> [0,1]<br><strong>Explanation:</strong> Because nums[0] + nums[1] == 9, we return [0, 1].",
+        suggestion: "Optimize Two Sum using Hash Map"
+      },
+      {
+        id: 2,
+        title: "Add Two Numbers",
+        number: "2",
+        difficulty: "Medium",
+        acceptance: "40.5%",
+        topics: ["Linked List", "Math"],
+        solved: false,
+        description: "You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order, and each of their nodes contains a single digit. Add the two numbers and return the sum as a linked list.",
+        example: "<strong>Input:</strong> l1 = [2,4,3], l2 = [5,6,4]<br><strong>Output:</strong> [7,0,8]<br><strong>Explanation:</strong> 342 + 465 = 807.",
+        suggestion: "Solve Add Two Numbers using linked list node traversal"
+      },
+      {
+        id: 3,
+        title: "Longest Substring Without Repeating Characters",
+        number: "3",
+        difficulty: "Medium",
+        acceptance: "33.8%",
+        topics: ["Hash Table", "String", "Sliding Window"],
+        solved: false,
+        description: "Given a string <code>s</code>, find the length of the longest substring without repeating characters.",
+        example: "<strong>Input:</strong> s = \"abcabcbb\"<br><strong>Output:</strong> 3<br><strong>Explanation:</strong> The answer is \"abc\", with the length of 3.",
+        suggestion: "Explain sliding window technique for Longest Substring"
+      },
+      {
+        id: 4,
+        title: "XML External Entity (XXE) Injection Parser",
+        number: "4",
+        difficulty: "Hard",
+        acceptance: "28.5%",
+        topics: ["Security", "XML"],
+        solved: false,
+        description: "Secure an XML parser configuration against XML External Entity (XXE) injection attacks. Prevent the parser from resolving external entities or loading external DTDs.",
+        example: "<strong>Input:</strong> &lt;!DOCTYPE foo [ &lt;!ENTITY xxe SYSTEM \"file:///etc/passwd\"&gt; ]&gt;&lt;foo&gt;&amp;xxe;&lt;/foo&gt;<br><strong>Output:</strong> ParserException: External entities are disabled.",
+        suggestion: "Scan XML parser code for XXE vulnerabilities"
+      },
+      {
+        id: 5,
+        title: "SQL Injection Mitigation in Login Handler",
+        number: "5",
+        difficulty: "Easy",
+        acceptance: "65.2%",
+        topics: ["Security", "Database"],
+        solved: true,
+        description: "Secure a database login query handler against SQL injection attacks. Upgrade concatenating dynamic queries to use parameterized prepared statements.",
+        example: "<strong>Input:</strong> username = \"admin' OR '1'='1\", password = \"xyz\"<br><strong>Output:</strong> Authentication failed (safe prepared query executed).",
+        suggestion: "🛡️ Scan login handler for OWASP security flaws"
+      },
+      {
+        id: 6,
+        title: "Longest Palindromic Substring",
+        number: "6",
+        difficulty: "Medium",
+        acceptance: "32.4%",
+        topics: ["String", "Dynamic Programming"],
+        solved: false,
+        description: "Given a string <code>s</code>, return the longest palindromic substring in <code>s</code>.",
+        example: "<strong>Input:</strong> s = \"babad\"<br><strong>Output:</strong> \"bab\" (or \"aba\")",
+        suggestion: "Explain dynamic programming formulation for longest palindromic substring"
+      },
+      {
+        id: 7,
+        title: "Buffer Overflow Check in C-String Copy",
+        number: "7",
+        difficulty: "Hard",
+        acceptance: "18.2%",
+        topics: ["Security", "C++"],
+        solved: false,
+        description: "Audit a C++ program that copies user input into a fixed-size character array. Prevent buffer overflow exploits by replacing standard unsecure copy functions (like <code>strcpy</code>) with secure alternatives.",
+        example: "<strong>Input:</strong> input = \"A\" * 100, buffer_size = 16<br><strong>Output:</strong> CompileError/ExecutionBlocked: Safe copy bound exceeded.",
+        suggestion: "Audit C++ code for strcpy buffer overflow vulnerabilities"
+      },
+      {
+        id: 8,
+        title: "Regular Expression Matching",
+        number: "8",
+        difficulty: "Hard",
+        acceptance: "28.0%",
+        topics: ["String", "Dynamic Programming", "Recursion"],
+        solved: false,
+        description: "Implement regular expression matching with support for <code>'.'</code> and <code>'*'</code>. '.' matches any single character, and '*' matches zero or more of the preceding element.",
+        example: "<strong>Input:</strong> s = \"aa\", p = \"a*\"<br><strong>Output:</strong> true<br><strong>Explanation:</strong> '*' means zero or more of the preceding element 'a'.",
+        suggestion: "Explain regular expression matching DP state transitions"
+      }
+    ];
+
+    // Language starter code templates
+    const problemTemplates = {
+      1: {
+        python: `class Solution:\n    def twoSum(self, nums: list[int], target: int) -> list[int]:\n        # Write your Python solution here\n        pass\n`,
+        javascript: `/**\n * @param {number[]} nums\n * @param {number} target\n * @return {number[]}\n */\nvar twoSum = function(nums, target) {\n    // Write your JavaScript solution here\n    return [];\n};\n`,
+        cpp: `class Solution {\npublic:\n    vector<int> twoSum(vector<int>& nums, int target) {\n        // Write your C++ solution here\n        return {};\n    }\n};\n`,
+        java: `class Solution {\n    public int[] twoSum(int[] nums, int target) {\n        // Write your Java solution here\n        return new int[0];\n    }\n}\n`
+      },
+      2: {
+        python: `class Solution:\n    def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:\n        # Write your Python solution here\n        pass\n`,
+        javascript: `var addTwoNumbers = function(l1, l2) {\n    // Write your JavaScript solution here\n    return null;\n};\n`,
+        cpp: `class Solution {\npublic:\n    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {\n        // Write your C++ solution here\n        return nullptr;\n    }\n};\n`,
+        java: `class Solution {\n    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {\n        // Write your Java solution here\n        return null;\n    }\n}\n`
+      },
+      3: {
+        python: `class Solution:\n    def lengthOfLongestSubstring(self, s: str) -> int:\n        # Write your Python solution here\n        return 0\n`,
+        javascript: `var lengthOfLongestSubstring = function(s) {\n    // Write your JavaScript solution here\n    return 0;\n};\n`,
+        cpp: `class Solution {\npublic:\n    int lengthOfLongestSubstring(string s) {\n        // Write your C++ solution here\n        return 0;\n    }\n};\n`,
+        java: `class Solution {\n    public int lengthOfLongestSubstring(String s) {\n        // Write your Java solution here\n        return 0;\n    }\n}\n`
+      },
+      4: {
+        python: `import xml.etree.ElementTree as ET\n\nclass XMLParser:\n    def parse_xml_safely(self, xml_string: str) -> ET.Element:\n        # Prevent XML External Entity (XXE) injection attacks\n        # Write your secure Python code here\n        pass\n`,
+        javascript: `const libxmljs = require('libxmljs');\n\nfunction parseXmlSafely(xmlString) {\n    // Prevent XML External Entity (XXE) injection attacks\n    // Write your secure JavaScript code here\n}\n`,
+        cpp: `#include <xercesc/parsers/XercesDOMParser.hpp>\nusing namespace xercesc;\n\nclass SecureXMLParser {\npublic:\n    void parseXMLSafely(const char* xmlContent) {\n        // Prevent XML External Entity (XXE) injection attacks\n        // Write your secure C++ code here\n    }\n};\n`,
+        java: `import javax.xml.parsers.DocumentBuilderFactory;\n\nclass SecureXMLParser {\n    public void parseXMLSafely(String xmlContent) throws Exception {\n        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();\n        // Prevent XML External Entity (XXE) injection attacks\n        // Configure dbf to disable external DTDs and entities\n        \n    }\n}\n`
+      },
+      5: {
+        python: `import sqlite3\n\nclass LoginHandler:\n    def authenticate_user(self, conn: sqlite3.Connection, user: str, password_hash: str) -> bool:\n        # Prevent SQL injection by using prepared statements\n        # Write your secure Python code here\n        pass\n`,
+        javascript: `const mysql = require('mysql2');\n\nfunction authenticateUser(connection, username, passwordHash) {\n    // Prevent SQL injection by using parameterized queries\n    // Write your secure JavaScript code here\n}\n`,
+        cpp: `#include <sqlite3.h>\n\nclass LoginHandler {\npublic:\n    bool authenticateUser(sqlite3* db, const char* user, const char* passHash) {\n        // Prevent SQL injection by using parameterized prepared statements\n        // Write your secure C++ code here\n        return false;\n    }\n};\n`,
+        java: `import java.sql.*;\n\nclass LoginHandler {\n    public boolean authenticateUser(Connection conn, String username, String passwordHash) throws SQLException {\n        // Prevent SQL injection by using prepared statements\n        // Write your secure Java code here\n        return false;\n    }\n}\n`
+      },
+      6: {
+        python: `class Solution:\n    def longestPalindrome(self, s: str) -> str:\n        # Write your Python solution here\n        return ""\n`,
+        javascript: `var longestPalindrome = function(s) {\n    // Write your JavaScript solution here\n    return "";\n};\n`,
+        cpp: `class Solution {\npublic:\n    string longestPalindrome(string s) {\n        // Write your C++ solution here\n        return "";\n    }\n};\n`,
+        java: `class Solution {\n    public String longestPalindrome(String s) {\n        // Write your Java solution here\n        return "";\n    }\n}\n`
+      },
+      7: {
+        python: `def safe_copy(src: str, dest_limit: int) -> str:\n    # Verify memory copy boundaries\n    # Write your secure Python bounds check here\n    pass\n`,
+        javascript: `function safeBufferCopy(srcString, destLimit) {\n    // Verify memory copy boundaries\n    // Write your secure JavaScript validator here\n}\n`,
+        cpp: `#include <cstring>\n\nclass SafeMemoryCopy {\npublic:\n    void safeStringCopy(char* dest, const char* src, size_t destSize) {\n        // Prevent buffer overflow vulnerabilities\n        // Write your secure C++ code here\n    }\n};\n`,
+        java: `public class SafeMemoryCopy {\n    public static byte[] safeBufferCopy(byte[] src, int destSize) {\n        // Verify byte buffer boundary checks\n        // Write your secure Java code here\n        return new byte[0];\n    }\n}\n`
+      },
+      8: {
+        python: `class Solution:\n    def isMatch(self, s: str, p: str) -> bool:\n        # Write your Python solution here\n        return False\n`,
+        javascript: `var isMatch = function(s, p) {\n    // Write your JavaScript solution here\n    return false;\n};\n`,
+        cpp: `class Solution {\npublic:\n    bool isMatch(string s, string p) {\n        // Write your C++ solution here\n        return false;\n    }\n};\n`,
+        java: `class Solution {\n    public boolean isMatch(String s, String p) {\n        // Write your Java solution here\n        return false;\n    }\n}\n`
+      }
+    };
+
+    // Reference solutions and explanations
+    const problemSolutions = {
+      1: {
+        explanation: "The optimal solution is to use a Hash Map (dictionary) to store each number and its index. For each number, calculate its complement (target - number) and check if it already exists in the Map. This achieves a Time Complexity of <b>O(N)</b> and Space Complexity of <b>O(N)</b>.",
+        snippet: "class Solution:\n    def twoSum(self, nums: List[int], target: int) -> List[int]:\n        seen = {}\n        for i, num in enumerate(nums):\n            complement = target - num\n            if complement in seen:\n                return [seen[complement], i]\n            seen[num] = i\n        return []"
+      },
+      2: {
+        explanation: "Initialize a dummy node as the head of the output linked list. Maintain a carry variable initialized to 0. Traverse both input lists, sum up the values of current nodes and carry, update the carry, and append a new node with the value `sum % 10` to the result list.",
+        snippet: "class Solution:\n    def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:\n        dummy = ListNode(0)\n        curr = dummy\n        carry = 0\n        while l1 or l2 or carry:\n            val1 = l1.val if l1 else 0\n            val2 = l2.val if l2 else 0\n            total = val1 + val2 + carry\n            carry = total // 10\n            curr.next = ListNode(total % 10)\n            curr = curr.next\n            l1 = l1.next if l1 else None\n            l2 = l2.next if l2 else None\n        return dummy.next"
+      },
+      3: {
+        explanation: "Use a sliding window technique with a hash map to keep track of the last seen index of each character. Move the right pointer to expand the window, and if a duplicate is found, move the left pointer to `max(left, last_seen[char] + 1)`.",
+        snippet: "class Solution:\n    def lengthOfLongestSubstring(self, s: str) -> int:\n        char_map = {}\n        left = max_len = 0\n        for right, char in enumerate(s):\n            if char in char_map:\n                left = max(left, char_map[char] + 1)\n            char_map[char] = right\n            max_len = max(max_len, right - left + 1)\n        return max_len"
+      },
+      4: {
+        explanation: "To mitigate XXE vulnerabilities, configure the XML parser to explicitly disable the loading of external DTDs and resolution of external entities. In Java, setting features on standard XML parsers guarantees safety.",
+        snippet: "// Java secure implementation:\nDocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();\ndbf.setFeature(\"http://apache.org/xml/features/disallow-doctype-decl\", true);\ndbf.setFeature(\"http://xml.org/sax/features/external-general-entities\", false);\ndbf.setFeature(\"http://xml.org/sax/features/external-parameter-entities\", false);"
+      },
+      5: {
+        explanation: "Concatenating strings to construct database queries allows SQL injections. Parameterized queries (prepared statements) ensure the database compiles the SQL structure first, and treats parameter inputs strictly as values rather than executable code.",
+        snippet: "# Python secure implementation:\nquery = \"SELECT * FROM users WHERE username = ? AND password = ?\"\ncursor.execute(query, (username, password_hash))\nreturn cursor.fetchone() is not None"
+      },
+      6: {
+        explanation: "A string is palindromic if its outer characters match and its inner substring is also palindromic. We can use Dynamic Programming to solve this by building a table dp[i][j] or by expanding around center nodes. Expanding around centers is faster: O(N^2) time and O(1) space.",
+        snippet: "class Solution:\n    def longestPalindrome(self, s: str) -> str:\n        res = \"\"\n        for i in range(len(s)):\n            tmp1 = self.helper(s, i, i)\n            if len(tmp1) > len(res): res = tmp1\n            tmp2 = self.helper(s, i, i + 1)\n            if len(tmp2) > len(res): res = tmp2\n        return res"
+      },
+      7: {
+        explanation: "Unbounded copy functions like strcpy or sprintf do not check the length of the source string, allowing it to overwrite adjacent memory. Use safe bounded copy functions like strncpy or std::string objects in C++.",
+        snippet: "// C++ secure implementation:\n#include <string>\n#include <algorithm>\n\nvoid safeStringCopy(char* dest, const char* src, size_t destSize) {\n    if (destSize == 0) return;\n    size_t copyLen = std::min(strlen(src), destSize - 1);\n    memcpy(dest, src, copyLen);\n    dest[copyLen] = '\\0';\n}"
+      },
+      8: {
+        explanation: "This problem can be solved using Dynamic Programming. Define a 2D grid dp[i][j] where dp[i][j] is true if s[i:] matches p[j:]. The transition depends on whether the next character in pattern p is '*' or not.",
+        snippet: "class Solution:\n    def isMatch(self, s: str, p: str) -> bool:\n        dp = [[False] * (len(p) + 1) for _ in range(len(s) + 1)]\n        dp[-1][-1] = True\n        # ... loop dynamic programming logic"
+      }
+    };
+
+    let currentProblemId = null;
+    let currentLanguage = 'python';
+    let userWorkspaceCodes = {};
+    let sessionSubmissions = [
+      { problemId: 1, status: "Wrong Answer", runtime: "N/A", memory: "N/A", language: "PYTHON", timestamp: "10 minutes ago" },
+      { problemId: 5, status: "Accepted", runtime: "12 ms", memory: "15.4 MB", language: "JAVASCRIPT", timestamp: "5 minutes ago" }
+    ];
+
+    // Initialize code workspace drafts
+    practiceProblems.forEach(p => {
+      userWorkspaceCodes[p.id] = {
+        python: problemTemplates[p.id].python,
+        javascript: problemTemplates[p.id].javascript,
+        cpp: problemTemplates[p.id].cpp,
+        java: problemTemplates[p.id].java
+      };
+    });
+
+    let currentDifficultyFilter = 'all';
+    let currentStatusFilter = 'all';
+    let currentSearchQuery = '';
+
+    function updateDashboardStats() {
+      let pythonSolved = 67;
+      let jsSolved = 40;
+      let cppSolved = 15;
+      let javaSolved = 8;
+
+      practiceProblems.forEach(prob => {
+        if (prob.solved) {
+          if (prob.id === 1) { pythonSolved++; jsSolved++; }
+          else if (prob.id === 2) { javaSolved++; cppSolved++; }
+          else if (prob.id === 3) { pythonSolved++; jsSolved++; }
+          else if (prob.id === 4) { javaSolved++; }
+          else if (prob.id === 5) { jsSolved++; }
+          else if (prob.id === 6) { pythonSolved++; cppSolved++; }
+          else if (prob.id === 7) { cppSolved++; }
+          else if (prob.id === 8) { pythonSolved++; }
+        }
+      });
+
+      const fillPy = document.getElementById('fill-python');
+      const countPy = document.getElementById('count-python');
+      const pctPy = document.getElementById('pct-python');
+      if (fillPy && countPy && pctPy) {
+        const pct = Math.min(pythonSolved, 100);
+        fillPy.style.width = pct + '%';
+        countPy.innerText = pythonSolved + ' Solved';
+        pctPy.innerText = pct + '% Completed';
+      }
+
+      const fillJs = document.getElementById('fill-js');
+      const countJs = document.getElementById('count-js');
+      const pctJs = document.getElementById('pct-js');
+      if (fillJs && countJs && pctJs) {
+        const pct = Math.min(jsSolved, 100);
+        fillJs.style.width = pct + '%';
+        countJs.innerText = jsSolved + ' Solved';
+        pctJs.innerText = pct + '% Completed';
+      }
+
+      const fillCpp = document.getElementById('fill-cpp');
+      const countCpp = document.getElementById('count-cpp');
+      const pctCpp = document.getElementById('pct-cpp');
+      if (fillCpp && countCpp && pctCpp) {
+        const pct = Math.min(cppSolved, 100);
+        fillCpp.style.width = pct + '%';
+        countCpp.innerText = cppSolved + ' Solved';
+        pctCpp.innerText = pct + '% Completed';
+      }
+
+      const fillJava = document.getElementById('fill-java');
+      const countJava = document.getElementById('count-java');
+      const pctJava = document.getElementById('pct-java');
+      if (fillJava && countJava && pctJava) {
+        const pct = Math.min(javaSolved, 100);
+        fillJava.style.width = pct + '%';
+        countJava.innerText = javaSolved + ' Solved';
+        pctJava.innerText = pct + '% Completed';
+      }
+
+      if (isProfileLoaded && typeof updateProfileUI === 'function') {
+        updateProfileUI();
+      }
+      if (typeof updateDashboardWidgets === 'function') {
+        updateDashboardWidgets();
+      }
+    }
+
+    // -------------------------------------------------------------
+    // DYNAMIC DASHBOARD WIDGETS CONTROLLER
+    // -------------------------------------------------------------
+    function updateDashboardWidgets() {
+      // 1. Username display
+      const userDisplay = document.getElementById('dash-username-display');
+      if (userDisplay) {
+        userDisplay.innerText = userProfileData.displayName || "ganeshabbu03";
+      }
+
+      // 2. Problems Solved Count
+      const solvedProblems = practiceProblems.filter(p => p.solved);
+      const solvedCount = solvedProblems.length;
+      const solvedStatEl = document.getElementById('dash-stat-solved');
+      if (solvedStatEl) solvedStatEl.innerText = solvedCount;
+
+      // 3. Current Streak
+      let streakCount = 0;
+      try {
+        const stored = localStorage.getItem('vericode_streak_data');
+        if (stored) streakCount = JSON.parse(stored).count || 0;
+      } catch (e) {}
+      if (streakCount === 0 && solvedCount > 0) {
+        streakCount = 1;
+      }
+      const streakStatEl = document.getElementById('dash-stat-streak');
+      if (streakStatEl) {
+        streakStatEl.innerText = `${streakCount} day${streakCount === 1 ? '' : 's'}`;
+      }
+
+      // 4. Badges Earned
+      let badgesCount = 0;
+      const solvedIds = solvedProblems.map(p => p.id);
+      if (solvedIds.length >= 1) badgesCount++;
+      if (solvedIds.includes(4) && solvedIds.includes(5)) badgesCount++;
+      if (solvedIds.includes(7)) badgesCount++;
+      if (solvedIds.includes(8)) badgesCount++;
+      const badgesStatEl = document.getElementById('dash-stat-badges');
+      if (badgesStatEl) badgesStatEl.innerText = badgesCount;
+
+      // 5. Global Rank
+      let rankText = "Unranked";
+      if (solvedCount > 0) {
+        if (solvedCount >= 8) rankText = "#1";
+        else if (solvedCount >= 5) rankText = "#2";
+        else if (solvedCount >= 3) rankText = "#3";
+        else if (solvedCount >= 2) rankText = "#4";
+        else rankText = "#5";
+      }
+      const rankStatEl = document.getElementById('dash-stat-rank');
+      if (rankStatEl) rankStatEl.innerText = rankText;
+
+      // 6. Language Progress
+      let learningProgress = { python: 0, javascript: 0, java: 0, cpp: 0 };
+      try {
+        const stored = localStorage.getItem('vericode_learning_progress');
+        if (stored) learningProgress = { ...learningProgress, ...JSON.parse(stored) };
+      } catch (e) {}
+      
+      for (const lang in learningProgress) {
+        const pct = learningProgress[lang];
+        const pctEl = document.getElementById(`dash-lang-pct-${lang}`);
+        const fillEl = document.getElementById(`dash-lang-fill-${lang}`);
+        if (pctEl) pctEl.innerText = `${pct}%`;
+        if (fillEl) fillEl.style.width = `${pct}%`;
+      }
+
+      // 7. Onboarding Checklist
+      let isProfileSaved = false;
+      try {
+        isProfileSaved = localStorage.getItem('vericode_profile_saved') === 'true';
+      } catch (e) {}
+      const hasStartedLearning = Object.values(learningProgress).some(pct => pct > 0);
+      let hasJoinedChat = false;
+      try {
+        hasJoinedChat = localStorage.getItem('vericode_chat_joined') === 'true';
+      } catch (e) {}
+
+      function setChecklistItem(circleId, itemId, completed) {
+        const circle = document.getElementById(circleId);
+        const item = document.getElementById(itemId);
+        if (circle && item) {
+          circle.classList.toggle('checked', completed);
+          item.classList.toggle('checked', completed);
+        }
+      }
+
+      setChecklistItem('chk-circle-practice', 'chk-item-practice', solvedCount > 0);
+      setChecklistItem('chk-circle-profile', 'chk-item-profile', isProfileSaved);
+      setChecklistItem('chk-circle-learning', 'chk-item-learning', hasStartedLearning);
+      setChecklistItem('chk-circle-community', 'chk-item-community', hasJoinedChat);
+
+      // 8. Recent Activity Timeline
+      const activityContainer = document.getElementById('dash-activity-container');
+      if (activityContainer) {
+        let activities = [];
+        try {
+          const stored = localStorage.getItem('vericode_recent_activity');
+          if (stored) activities = JSON.parse(stored);
+        } catch (e) {}
+        
+        if (activities.length === 0) {
+          activityContainer.innerHTML = `
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; padding: 40px 20px; text-align: center; color: var(--color-gray-500); gap: 12px;">
+              <svg style="width: 48px; height: 48px; color: var(--color-gray-700);" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+              <span style="font-size: 13.5px;">No activity yet. Start solving problems!</span>
+            </div>
+          `;
+        } else {
+          let html = '<div style="font-size: 13px; color: var(--color-gray-400); display: flex; flex-direction: column; gap: 12px; margin-top: 10px;">';
+          activities.slice(0, 3).forEach((act, idx) => {
+            const isLast = idx === activities.slice(0, 3).length - 1;
+            html += `
+              <div style="display: flex; justify-content: space-between; border-bottom: ${isLast ? 'none' : '1px solid rgba(255,255,255,0.05)'}; padding-bottom: ${isLast ? '0' : '8px'};">
+                <span>${act.text}</span>
+                <span style="color: var(--color-gray-600); flex-shrink: 0; margin-left: 10px;">${formatRelativeTime(act.time)}</span>
+              </div>
+            `;
+          });
+          html += '</div>';
+          activityContainer.innerHTML = html;
+        }
+      }
+
+      // 9. Topic Coverage Circles
+      const getTopicPct = (topicName) => {
+        const total = practiceProblems.filter(p => p.topics.includes(topicName)).length;
+        if (total === 0) return 0;
+        const solved = practiceProblems.filter(p => p.topics.includes(topicName) && p.solved).length;
+        return Math.round((solved / total) * 100);
+      };
+      
+      const arrayPct = getTopicPct('Array');
+      const stringPct = getTopicPct('String');
+      const treePct = getTopicPct('Tree');
+      
+      setCircleProgress('circle-arrays', 'text-arrays', arrayPct);
+      setCircleProgress('circle-strings', 'text-strings', stringPct);
+      setCircleProgress('circle-trees', 'text-trees', treePct);
+    }
+
+    function setCircleProgress(id, textId, percent) {
+      const circle = document.getElementById(id);
+      const text = document.getElementById(textId);
+      if (!circle || !text) return;
+      const offset = 201 - (201 * percent / 100);
+      circle.style.strokeDashoffset = offset;
+      text.innerText = `${percent}%`;
+    }
+
+    function formatRelativeTime(isoString) {
+      const date = new Date(isoString);
+      const now = new Date();
+      const diffMs = now - date;
+      const diffMins = Math.floor(diffMs / 60000);
+      if (diffMins < 1) return "Just now";
+      if (diffMins < 60) return `${diffMins}m ago`;
+      const diffHours = Math.floor(diffMins / 60);
+      if (diffHours < 24) return `${diffHours}h ago`;
+      const diffDays = Math.floor(diffHours / 24);
+      return `${diffDays}d ago`;
+    }
+
+    function logRecentActivity(text) {
+      let activities = [];
+      try {
+        const stored = localStorage.getItem('vericode_recent_activity');
+        if (stored) activities = JSON.parse(stored);
+      } catch (e) {}
+      
+      const newActivity = {
+        text: text,
+        time: new Date().toISOString()
+      };
+      
+      activities.unshift(newActivity);
+      if (activities.length > 10) {
+        activities = activities.slice(0, 10);
+      }
+      localStorage.setItem('vericode_recent_activity', JSON.stringify(activities));
+      updateDashboardWidgets();
+    }
+
+    function updateStreakOnSolve() {
+      const todayStr = new Date().toISOString().split('T')[0];
+      let streakData = { count: 0, lastSolvedDate: "" };
+      try {
+        const stored = localStorage.getItem('vericode_streak_data');
+        if (stored) streakData = JSON.parse(stored);
+      } catch (e) {}
+      
+      if (streakData.lastSolvedDate !== todayStr) {
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yesterdayStr = yesterday.toISOString().split('T')[0];
+        if (streakData.lastSolvedDate === yesterdayStr) {
+          streakData.count += 1;
+        } else {
+          streakData.count = 1;
+        }
+        streakData.lastSolvedDate = todayStr;
+        localStorage.setItem('vericode_streak_data', JSON.stringify(streakData));
+      }
+    }
+
+    function onProfileSaveTrigger() {
+      localStorage.setItem('vericode_profile_saved', 'true');
+      logRecentActivity('Updated user profile details');
+      if (typeof updateDashboardWidgets === 'function') {
+        updateDashboardWidgets();
+      }
+    }
+
+    function saveLearningProgress(lang, topicIndex, totalTopics) {
+      let progressData = {};
+      try {
+        const stored = localStorage.getItem('vericode_learning_progress');
+        if (stored) progressData = JSON.parse(stored);
+      } catch (e) {}
+      
+      const currentMax = progressData[lang] || 0;
+      const pct = Math.round(((topicIndex + 1) / totalTopics) * 100);
+      if (pct > currentMax) {
+        progressData[lang] = pct;
+        localStorage.setItem('vericode_learning_progress', JSON.stringify(progressData));
+        
+        // Log activity
+        if (typeof logRecentActivity === 'function') {
+          const courseName = lang === 'cpp' ? 'C++' : lang.charAt(0).toUpperCase() + lang.slice(1);
+          logRecentActivity(`Completed lesson ${topicIndex + 1} of <b>${courseName} Course</b>`);
+        }
+      }
+    }
+
+    // LeetCode-style Leaderboard Logic
+    let currentLeaderboardFilter = 'global';
+    let leaderboardSearchQuery = '';
+    let selectedLeaderboardUserId = 'current_user';
+
+    const leaderboardUsers = [
+      {
+        id: "sec_wizard_99",
+        name: "sec_wizard_99",
+        avatarId: 3,
+        score: 2450,
+        rating: 2820,
+        tier: "Guardian",
+        solved: { easy: 50, medium: 68, hard: 30 },
+        languages: { Python: 45, JS: 25, Cpp: 20, Java: 10 },
+        badges: ["OWASP Master", "Crypto Wizard"],
+        country: "US",
+        flag: "🇺🇸",
+        recent: "Solved SQL Injection Mitigation 5m ago"
+      },
+      {
+        id: "overflow_pwn",
+        name: "overflow_pwn",
+        avatarId: 2,
+        score: 2120,
+        rating: 2510,
+        tier: "Guardian",
+        solved: { easy: 40, medium: 55, hard: 30 },
+        languages: { Cpp: 60, Python: 25, JS: 10, Java: 5 },
+        badges: ["C++ Expert", "Kernel Auditor"],
+        country: "DE",
+        flag: "🇩🇪",
+        recent: "Solved Buffer Overflow Check 2h ago"
+      },
+      {
+        id: "sandbox_escaper",
+        name: "sandbox_escaper",
+        avatarId: 1,
+        score: 1980,
+        rating: 2340,
+        tier: "Knight",
+        solved: { easy: 35, medium: 45, hard: 30 },
+        languages: { JS: 50, Python: 30, Cpp: 15, Java: 5 },
+        badges: ["Kernel Auditor"],
+        country: "JP",
+        flag: "🇯🇵",
+        recent: "Solved XXE Injection Parser 1d ago"
+      },
+      {
+        id: "argon2_dev",
+        name: "argon2_dev",
+        avatarId: 4,
+        score: 1850,
+        rating: 2180,
+        tier: "Knight",
+        solved: { easy: 30, medium: 45, hard: 20 },
+        languages: { Python: 50, Java: 20, JS: 20, Cpp: 10 },
+        badges: ["Crypto Wizard"],
+        country: "CA",
+        flag: "🇨🇦",
+        recent: "Solved Two Sum 3d ago"
+      },
+      {
+        id: "current_user",
+        name: "ganeshabbu",
+        avatarId: 1,
+        score: 1330,
+        rating: 1742,
+        tier: "Knight",
+        solved: { easy: 45, medium: 25, hard: 12 },
+        languages: { Python: 50, JS: 30, Cpp: 15, Java: 5 },
+        badges: [],
+        country: "IN",
+        flag: "🇮🇳",
+        recent: "Solved Two Sum Just now"
+      },
+      {
+        id: "stack_smasher",
+        name: "stack_smasher",
+        avatarId: 2,
+        score: 1220,
+        rating: 1480,
+        tier: "Challenger",
+        solved: { easy: 30, medium: 30, hard: 10 },
+        languages: { Cpp: 40, Python: 30, JS: 20, Java: 10 },
+        badges: [],
+        country: "UK",
+        flag: "🇬🇧",
+        recent: "Solved Buffer Overflow Check 4d ago"
+      },
+      {
+        id: "cipher_queen",
+        name: "cipher_queen",
+        avatarId: 3,
+        score: 1150,
+        rating: 1420,
+        tier: "Challenger",
+        solved: { easy: 25, medium: 30, hard: 10 },
+        languages: { Python: 60, JS: 20, Java: 10, Cpp: 10 },
+        badges: [],
+        country: "FR",
+        flag: "🇫🇷",
+        recent: "Solved SQL Injection Mitigation 5d ago"
+      },
+      {
+        id: "buffer_fly",
+        name: "buffer_fly",
+        avatarId: 4,
+        score: 980,
+        rating: 1250,
+        tier: "Challenger",
+        solved: { easy: 20, medium: 25, hard: 5 },
+        languages: { Java: 45, Python: 25, JS: 20, Cpp: 10 },
+        badges: [],
+        country: "IN",
+        flag: "🇮🇳",
+        recent: "Solved Two Sum 1w ago"
+      }
+    ];
+
+    window.setLeaderboardFilter = function(filter) {
+      currentLeaderboardFilter = filter;
+      document.querySelectorAll('#leaderboard-filters button').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-filter') === filter);
+      });
+      renderLeaderboard();
+    };
+
+    function syncCurrentUserLeaderboardStats() {
+      const userRow = leaderboardUsers.find(u => u.id === 'current_user');
+      if (!userRow) return;
+
+      if (typeof userProfileData !== 'undefined') {
+        userRow.name = userProfileData.displayName || "ganeshabbu";
+        userRow.avatarId = userProfileData.avatarId || 1;
+        if (userProfileData.location) {
+          userRow.country = userProfileData.location.substring(0, 2).toUpperCase();
+        }
+      }
+
+      const solvedPractice = practiceProblems.filter(p => p.solved);
+      let baseEasy = 43;
+      let baseMedium = 25;
+      let baseHard = 12;
+
+      solvedPractice.forEach(p => {
+        if (p.difficulty === 'Easy') baseEasy++;
+        else if (p.difficulty === 'Medium') baseMedium++;
+        else if (p.difficulty === 'Hard') baseHard++;
+      });
+
+      userRow.solved.easy = baseEasy;
+      userRow.solved.medium = baseMedium;
+      userRow.solved.hard = baseHard;
+
+      const totalSolved = baseEasy + baseMedium + baseHard;
+      userRow.score = 1000 + (baseEasy * 10) + (baseMedium * 20) + (baseHard * 30);
+      userRow.rating = 1200 + (baseEasy * 8) + (baseMedium * 15) + (baseHard * 25);
+
+      if (userRow.rating > 2200) userRow.tier = "Guardian";
+      else if (userRow.rating > 1600) userRow.tier = "Knight";
+      else userRow.tier = "Challenger";
+
+      const userBadges = [];
+      if (totalSolved >= 80) userBadges.push("Vericode Rising");
+      if (practiceProblems.find(p => p.id === 4).solved && practiceProblems.find(p => p.id === 5).solved) {
+        userBadges.push("OWASP Master");
+      }
+      if (practiceProblems.find(p => p.id === 7).solved) {
+        userBadges.push("C++ Expert");
+      }
+      if (practiceProblems.find(p => p.id === 8).solved) {
+        userBadges.push("Crypto Wizard");
+      }
+      userRow.badges = userBadges;
+
+      const rankValEl = document.getElementById('user-quick-rank');
+      const scoreValEl = document.getElementById('user-quick-score');
+      const ratingValEl = document.getElementById('user-quick-rating');
+      
+      const sortedTemp = [...leaderboardUsers].sort((a, b) => b.score - a.score);
+      const userRank = sortedTemp.findIndex(u => u.id === 'current_user') + 1;
+
+      if (rankValEl) rankValEl.innerText = `#${userRank}`;
+      if (scoreValEl) scoreValEl.innerText = userRow.score.toLocaleString();
+      if (ratingValEl) {
+        ratingValEl.innerHTML = `${userRow.rating} <span style="font-size: 11px; font-weight: normal; color: #ffd700; border: 1.5px solid rgba(255,215,0,0.3); padding: 1px 4px; border-radius: 4px; margin-left: 4px; background: rgba(255,215,0,0.06);">${userRow.tier}</span>`;
+      }
+    }
+
+    window.showLeaderboardUserDetail = function(userId) {
+      selectedLeaderboardUserId = userId;
+      const user = leaderboardUsers.find(u => u.id === userId);
+      const container = document.getElementById('leaderboard-detail-content');
+      if (!user || !container) return;
+
+      const totalSolved = user.solved.easy + user.solved.medium + user.solved.hard;
+      const easyPct = Math.round((user.solved.easy / 60) * 100);
+      const medPct = Math.round((user.solved.medium / 80) * 100);
+      const hardPct = Math.round((user.solved.hard / 40) * 100);
+
+      const avatarSvg = AVATAR_SVGS[user.avatarId] || AVATAR_SVGS[1];
+      const tierBadgeColor = user.tier === "Guardian" ? "#ffd700" : (user.tier === "Knight" ? "#3b82f6" : "#a3a3a3");
+      const tierGlow = user.tier === "Guardian" ? 'box-shadow: 0 0 15px rgba(255, 215, 0, 0.2); border-color: rgba(255, 215, 0, 0.4);' : (user.tier === "Knight" ? 'box-shadow: 0 0 15px rgba(59, 130, 246, 0.15); border-color: rgba(59, 130, 246, 0.3);' : '');
+
+      let badgesListHTML = '<span style="color: var(--color-gray-500); font-size: 12px;">No badges earned yet.</span>';
+      if (user.badges && user.badges.length > 0) {
+        badgesListHTML = user.badges.map(b => {
+          let bColor = "3b82f6";
+          if (b === "OWASP Master") bColor = "ffd700";
+          else if (b === "C++ Expert") bColor = "10b981";
+          else if (b === "Kernel Auditor") bColor = "cd7f32";
+          else if (b === "Crypto Wizard") bColor = "8b5cf6";
+
+          return `<span class="lang-badge" style="font-size: 11px; border-color: rgba(${hexToRgb(bColor)}, 0.3); color: #${bColor}; background: rgba(${hexToRgb(bColor)}, 0.05); font-weight: 600;">${b}</span>`;
+        }).join('');
+      }
+
+      container.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 16px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); padding: 16px; border-radius: 12px; ${tierGlow}">
+          <div style="width: 56px; height: 56px; border-radius: 50%; overflow: hidden; border: 1.5px solid rgba(255,255,255,0.1); background: #121212; display: flex; align-items: center; justify-content: center;">
+            ${avatarSvg}
+          </div>
+          <div>
+            <div style="font-size: 16px; font-weight: 700; color: var(--color-white); font-family: var(--font-display);">${user.name} ${user.flag}</div>
+            <div style="display: flex; gap: 6px; align-items: center; margin-top: 4px;">
+              <span class="lang-badge" style="font-size: 10px; border-color: ${tierBadgeColor}; color: ${tierBadgeColor}; background: rgba(0,0,0,0.2); font-weight: 700;">${user.tier}</span>
+              <span style="font-size: 11px; color: var(--color-gray-500);">Rating: <b>${user.rating}</b></span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size: 13px; font-weight: 600; color: var(--color-white); margin-bottom: 12px; font-family: var(--font-display);">Problems Solved (${totalSolved})</div>
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
+                <span style="color: #10b981; font-weight: 600; display: flex; align-items: center; gap: 4px;">● Easy</span>
+                <span style="color: var(--color-white); font-weight: 500;">${user.solved.easy} <span style="color: var(--color-gray-500); font-size: 10.5px;">/ 60</span></span>
+              </div>
+              <div style="width: 100%; height: 6px; background: #121212; border-radius: 3px; overflow: hidden; border: 1px solid rgba(255,255,255,0.03);">
+                <div style="height: 100%; background: #10b981; border-radius: 3px; width: ${Math.min(easyPct, 100)}%;"></div>
+              </div>
+            </div>
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
+                <span style="color: #f59e0b; font-weight: 600; display: flex; align-items: center; gap: 4px;">● Medium</span>
+                <span style="color: var(--color-white); font-weight: 500;">${user.solved.medium} <span style="color: var(--color-gray-500); font-size: 10.5px;">/ 80</span></span>
+              </div>
+              <div style="width: 100%; height: 6px; background: #121212; border-radius: 3px; overflow: hidden; border: 1px solid rgba(255,255,255,0.03);">
+                <div style="height: 100%; background: #f59e0b; border-radius: 3px; width: ${Math.min(medPct, 100)}%;"></div>
+              </div>
+            </div>
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
+                <span style="color: #ef4444; font-weight: 600; display: flex; align-items: center; gap: 4px;">● Hard</span>
+                <span style="color: var(--color-white); font-weight: 500;">${user.solved.hard} <span style="color: var(--color-gray-500); font-size: 10.5px;">/ 40</span></span>
+              </div>
+              <div style="width: 100%; height: 6px; background: #121212; border-radius: 3px; overflow: hidden; border: 1px solid rgba(255,255,255,0.03);">
+                <div style="height: 100%; background: #ef4444; border-radius: 3px; width: ${Math.min(hardPct, 100)}%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size: 13px; font-weight: 600; color: var(--color-white); margin-bottom: 12px; font-family: var(--font-display);">Language Distribution</div>
+          <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12px;">
+            ${Object.entries(user.languages).map(([lang, val]) => `
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="color: var(--color-gray-400); font-weight: 500;">${lang}</span>
+                <span style="color: var(--color-white); font-weight: 600;">${val}%</span>
+              </div>
+              <div style="width: 100%; height: 4px; background: #121212; border-radius: 2px; overflow: hidden;">
+                <div style="height: 100%; background: #3b82f6; width: ${val}%;"></div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size: 13px; font-weight: 600; color: var(--color-white); margin-bottom: 12px; font-family: var(--font-display);">Unlocked Badges</div>
+          <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+            ${badgesListHTML}
+          </div>
+        </div>
+
+        <div style="border-top: 1px solid var(--color-gray-900); padding-top: 16px;">
+          <div style="font-size: 11px; color: var(--color-gray-500); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">Recent Activity</div>
+          <div style="font-size: 12px; color: var(--color-gray-300); margin-top: 6px; display: flex; align-items: center; gap: 6px;">
+            <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #10b981;"></span>
+            ${user.recent}
+          </div>
+        </div>
+      `;
+
+      document.querySelectorAll('#leaderboard-tbody tr').forEach(row => {
+        row.classList.toggle('active-row', row.getAttribute('data-user-id') === userId);
+      });
+    };
+
+    window.renderLeaderboard = function() {
+      const tbody = document.getElementById('leaderboard-tbody');
+      if (!tbody) return;
+
+      tbody.innerHTML = '';
+      syncCurrentUserLeaderboardStats();
+
+      let sortedUsers = [...leaderboardUsers];
+      if (currentLeaderboardFilter === 'global') {
+        sortedUsers.sort((a, b) => b.score - a.score);
+      } else if (currentLeaderboardFilter === 'contest') {
+        sortedUsers.sort((a, b) => b.rating - a.rating);
+      } else if (currentLeaderboardFilter === 'local') {
+        sortedUsers = sortedUsers.filter(u => u.country === 'IN').sort((a, b) => b.score - a.score);
+      }
+
+      if (leaderboardSearchQuery.trim()) {
+        const query = leaderboardSearchQuery.toLowerCase().trim();
+        sortedUsers = sortedUsers.filter(u => u.name.toLowerCase().includes(query));
+      }
+
+      if (sortedUsers.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="padding: 24px; text-align: center; color: var(--color-gray-500);">No users found matching "${leaderboardSearchQuery}"</td></tr>`;
+        return;
+      }
+
+      sortedUsers.forEach((user, idx) => {
+        let overallRankIndex;
+        if (currentLeaderboardFilter === 'local') {
+          overallRankIndex = leaderboardUsers.filter(u => u.country === 'IN').sort((a, b) => b.score - a.score).findIndex(u => u.id === user.id) + 1;
+        } else if (currentLeaderboardFilter === 'contest') {
+          overallRankIndex = [...leaderboardUsers].sort((a, b) => b.rating - a.rating).findIndex(u => u.id === user.id) + 1;
+        } else {
+          overallRankIndex = [...leaderboardUsers].sort((a, b) => b.score - a.score).findIndex(u => u.id === user.id) + 1;
+        }
+
+        let rankHTML = "";
+        if (overallRankIndex === 1) rankHTML = `<span style="font-weight: bold; font-size: 15px; color: #ffd700;">🥇 1</span>`;
+        else if (overallRankIndex === 2) rankHTML = `<span style="font-weight: bold; font-size: 15px; color: #c0c0c0;">🥈 2</span>`;
+        else if (overallRankIndex === 3) rankHTML = `<span style="font-weight: bold; font-size: 15px; color: #cd7f32;">🥉 3</span>`;
+        else rankHTML = `<span style="color: var(--color-gray-500); font-weight: 600; padding-left: 8px;">${overallRankIndex}</span>`;
+
+        const avatarSvg = AVATAR_SVGS[user.avatarId] || AVATAR_SVGS[1];
+        const isSelf = user.id === 'current_user';
+        const userStyle = isSelf ? 'color: #3b82f6; font-weight: 700;' : 'color: var(--color-white); font-weight: 600;';
+        
+        let tierColor = "#ffd700";
+        if (user.tier === "Knight") tierColor = "#3b82f6";
+        else if (user.tier === "Challenger") tierColor = "#a3a3a3";
+
+        const totalSolved = user.solved.easy + user.solved.medium + user.solved.hard;
+        const easyPct = Math.round((user.solved.easy / totalSolved) * 100);
+        const medPct = Math.round((user.solved.medium / totalSolved) * 100);
+        const hardPct = 100 - easyPct - medPct;
+
+        const tr = document.createElement('tr');
+        tr.setAttribute('data-user-id', user.id);
+        tr.style.cursor = 'pointer';
+        tr.style.borderBottom = '1px solid #141414';
+        tr.style.transition = 'background-color 0.2s ease';
+        if (user.id === selectedLeaderboardUserId) {
+          tr.className = 'active-row';
+        }
+
+        tr.onclick = () => showLeaderboardUserDetail(user.id);
+        
+        tr.innerHTML = `
+          <td style="padding: 14px 16px;">${rankHTML}</td>
+          <td style="padding: 14px 16px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <div style="width: 32px; height: 32px; border-radius: 50%; overflow: hidden; border: 1.5px solid rgba(255,255,255,0.06); background: #121212; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                ${avatarSvg}
+              </div>
+              <div>
+                <span style="${userStyle}">${user.name}</span>
+                <div style="display: flex; gap: 4px; align-items: center; margin-top: 2px;">
+                  <span style="font-size: 9px; font-weight: 700; color: ${tierColor}; letter-spacing: 0.02em; text-transform: uppercase;">${user.tier}</span>
+                  <span style="color: var(--color-gray-600); font-size: 10px;">• Rating: ${user.rating}</span>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td style="padding: 14px 16px; font-weight: 600; color: var(--color-white); font-size: 13.5px;">
+            ${currentLeaderboardFilter === 'contest' ? user.rating : user.score.toLocaleString()} <span style="font-size: 11px; color: var(--color-gray-500); font-weight: normal;">${currentLeaderboardFilter === 'contest' ? 'rtg' : 'pts'}</span>
+          </td>
+          <td style="padding: 14px 16px;">
+            <div style="display: flex; flex-direction: column; gap: 4px;">
+              <div style="font-size: 12px; color: var(--color-gray-300); font-weight: 500;">
+                <b>${totalSolved}</b> solved
+              </div>
+              <div style="display: flex; width: 100px; height: 5px; border-radius: 2.5px; overflow: hidden;">
+                <div style="background: #10b981; width: ${easyPct}%; height: 100%;"></div>
+                <div style="background: #f59e0b; width: ${medPct}%; height: 100%;"></div>
+                <div style="background: #ef4444; width: ${hardPct}%; height: 100%;"></div>
+              </div>
+            </div>
+          </td>
+          <td style="padding: 14px 16px; text-align: right; font-size: 18px;">
+            ${user.flag}
+          </td>
+        `;
+
+        tbody.appendChild(tr);
+      });
+
+      showLeaderboardUserDetail(selectedLeaderboardUserId);
+    };
+
+    // Fix My Itch logic
+    let currentItchFilter = 'all';
+    let itchSearchQuery = '';
+
+    const projectItches = [
+      {
+        id: 1,
+        title: "Secure JWT Auth Server",
+        category: "identity",
+        difficulty: "Easy",
+        painScore: 8.5,
+        upvotes: 542,
+        builders: 18,
+        author: "@sec_ops_guru",
+        frustration: "Why is sessions hijacking still a thing in 2026? A hacker stole my refresh token and kept the session alive forever because the library didn't rotate tokens. Please build a rotating refresh token server!",
+        requirements: [
+          "Hash passwords using Argon2id.",
+          "Implement refresh token rotation with reuse detection.",
+          "Rate-limit login and signup endpoints to prevent brute-force attacks."
+        ],
+        suggestion: "🛡️ How do I design a secure JWT server with Argon2id and refresh token rotation?"
+      },
+      {
+        id: 2,
+        title: "SQL Injection Scanner CLI",
+        category: "websec",
+        difficulty: "Medium",
+        painScore: 7.4,
+        upvotes: 318,
+        builders: 8,
+        author: "@tired_dev_99",
+        frustration: "Man, I have to manually inspect 200 input fields on our legacy database admin panels for SQL injections. We need a fast CLI tool that maps URL inputs and probes them automatically.",
+        requirements: [
+          "Identify error-based and boolean-based SQL injection paths.",
+          "Ensure strict input sanitization inside the scanner codebase itself.",
+          "Write passive signature check rules."
+        ],
+        suggestion: "🛡️ Help me write a basic SQL injection vulnerability scanner script in Python"
+      },
+      {
+        id: 3,
+        title: "OAuth 2.0 Auth Server with PKCE",
+        category: "identity",
+        difficulty: "Hard",
+        painScore: 9.2,
+        upvotes: 789,
+        builders: 24,
+        author: "@mobile_sec_guy",
+        frustration: "Mobile apps doing OAuth 2.0 without PKCE are leaking authorization codes in transit. We need a lightweight, compliant Zero-Trust authorization server that enforces PKCE strictly.",
+        requirements: [
+          "Validate PKCE code verifiers against stored challenges.",
+          "Enforce strict whitelist redirect URI matches.",
+          "Issue cryptographically signed tokens (RS256)."
+        ],
+        suggestion: "🛡️ Design an OAuth 2.0 server workflow that supports PKCE"
+      },
+      {
+        id: 4,
+        title: "End-to-End Encrypted Chat",
+        category: "crypto",
+        difficulty: "Hard",
+        painScore: 9.7,
+        upvotes: 1205,
+        builders: 36,
+        author: "@privacy_hawk",
+        frustration: "I don't trust server-side databases with our corporate chat logs. Can someone build a WebSocket chat that encrypts payloads in the browser before delivery, so even the hosting provider sees nothing?",
+        requirements: [
+          "Derive shared secrets using Diffie-Hellman Key Exchange (ECDH).",
+          "Encrypt payloads using authenticated AES-GCM-256.",
+          "Sign messages using ECDSA to verify authenticity."
+        ],
+        suggestion: "🛡️ How do I implement client-side Diffie-Hellman key exchange and AES-GCM encryption in Javascript?"
+      },
+      {
+        id: 5,
+        title: "Secure Payment Proxy Gateway",
+        category: "fintech",
+        difficulty: "Medium",
+        painScore: 8.9,
+        upvotes: 648,
+        builders: 15,
+        author: "@fintech_flow",
+        frustration: "Developers keep pasting raw payment API secret keys into client-side JS. We need an API proxy gateway that intercepts requests, attaches secret signatures securely on the server, and returns scrubbed responses.",
+        requirements: [
+          "Intercept and strip client-side API authorization keys.",
+          "Attach secure HMAC signatures server-side prior to gateway forwarding.",
+          "Log and audit payload parameters without storing sensitive card details."
+        ],
+        suggestion: "🛡️ Build a Node.js reverse proxy that adds server-side API keys and strips signatures"
+      },
+      {
+        id: 6,
+        title: "Rate-limiting Middleware with Redis",
+        category: "websec",
+        difficulty: "Easy",
+        painScore: 6.8,
+        upvotes: 425,
+        builders: 12,
+        author: "@infra_janitor",
+        frustration: "Botnets are spamming our login endpoint, executing 100 requests/sec. Standard stateful rate-limiters crash our container. Need a distributed rate-limiter using Redis token bucket algorithm.",
+        requirements: [
+          "Implement token-bucket algorithm using Redis transactions.",
+          "Enable dynamic bucket resizing based on client tiers.",
+          "Return 429 Too Many Requests status with Retry-After headers."
+        ],
+        suggestion: "🛡️ Design a distributed rate limiter in Redis with sliding window token bucket"
+      }
+    ];
+
+    window.setItchFilter = function(filter) {
+      currentItchFilter = filter;
+      document.querySelectorAll('#itch-filters button').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-filter') === filter);
+      });
+      renderItches();
+    };
+
+    // Save custom itches to local storage
+    function saveCustomItchesToStorage() {
+      try {
+        const customItches = projectItches.filter(i => i.id > 6);
+        localStorage.setItem('vericode_custom_itches', JSON.stringify(customItches));
+      } catch (err) {
+        console.error("Error saving custom itches:", err);
+      }
+    }
+
+    // Helper to get list of upvoted itches for the active user profile
+    function getUpvotedItches() {
+      const username = userProfileData.displayName || 'default';
+      const key = `vericode_upvoted_projects_${username}`;
+      try {
+        return JSON.parse(localStorage.getItem(key)) || [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function setUpvotedItches(upvotedList) {
+      const username = userProfileData.displayName || 'default';
+      const key = `vericode_upvoted_projects_${username}`;
+      localStorage.setItem(key, JSON.stringify(upvotedList));
+    }
+
+    // Load stored overrides for all upvotes
+    function getStoredUpvotesMap() {
+      try {
+        return JSON.parse(localStorage.getItem('vericode_itch_upvotes')) || {};
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function saveUpvoteToStorage(id, count) {
+      try {
+        const map = getStoredUpvotesMap();
+        map[id] = count;
+        localStorage.setItem('vericode_itch_upvotes', JSON.stringify(map));
+      } catch (e) {
+        console.error("Error saving upvotes map:", e);
+      }
+    }
+
+    // Load custom itches and restore upvotes on startup
+    try {
+      const stored = localStorage.getItem('vericode_custom_itches');
+      if (stored) {
+        const customList = JSON.parse(stored);
+        customList.forEach(itch => {
+          if (!projectItches.some(i => i.id === itch.id)) {
+            projectItches.push(itch);
+          }
+        });
+      }
+      
+      const upvotesMap = getStoredUpvotesMap();
+      projectItches.forEach(itch => {
+        if (upvotesMap[itch.id] !== undefined) {
+          itch.upvotes = upvotesMap[itch.id];
+        }
+      });
+    } catch (err) {
+      console.error("Error loading custom itches / upvotes:", err);
+    }
+
+    window.openPublishItchModal = function() {
+      const modal = document.getElementById('publish-itch-modal');
+      if (modal) {
+        modal.style.display = 'flex';
+        void modal.offsetWidth;
+        modal.style.opacity = '1';
+      }
+    };
+
+    window.closePublishItchModal = function() {
+      const modal = document.getElementById('publish-itch-modal');
+      if (modal) {
+        modal.style.opacity = '0';
+        setTimeout(() => {
+          modal.style.display = 'none';
+        }, 300);
+      }
+    };
+
+    window.submitPublishItch = function(e) {
+      if (e) e.preventDefault();
+      
+      const title = document.getElementById('itch-new-title').value.trim();
+      const category = document.getElementById('itch-new-category').value;
+      const difficulty = document.getElementById('itch-new-difficulty').value;
+      const painScore = parseFloat(document.getElementById('itch-new-pain').value) || 5.0;
+      const author = document.getElementById('itch-new-author').value.trim();
+      const frustration = document.getElementById('itch-new-frustration').value.trim();
+      const reqsText = document.getElementById('itch-new-requirements').value.trim();
+      
+      if (!title || !author || !frustration || !reqsText) {
+        alert("Please fill in all fields.");
+        return;
+      }
+      
+      const requirements = reqsText.split(',').map(r => r.trim()).filter(r => r.length > 0);
+      const maxId = projectItches.reduce((max, i) => i.id > max ? i.id : max, 0);
+      const newId = maxId + 1;
+      const builders = Math.floor(Math.random() * 5);
+      const suggestion = `🛡️ How do I implement the security requirement for ${title}?`;
+      
+      const newItch = {
+        id: newId,
+        title,
+        category,
+        difficulty,
+        painScore,
+        upvotes: 1,
+        builders,
+        author: author.startsWith('@') ? author : '@' + author,
+        frustration,
+        requirements,
+        suggestion
+      };
+      
+      projectItches.push(newItch);
+      
+      // Auto-upvote for creator
+      const upvotedList = getUpvotedItches();
+      if (!upvotedList.includes(newId)) {
+        upvotedList.push(newId);
+        setUpvotedItches(upvotedList);
+      }
+      saveUpvoteToStorage(newId, 1);
+      
+      saveCustomItchesToStorage();
+      closePublishItchModal();
+      document.getElementById('publish-itch-form').reset();
+      renderItches();
+    };
+
+    window.upvoteItch = function(e, id) {
+      if (e) e.stopPropagation();
+      const itch = projectItches.find(i => i.id === id);
+      if (itch) {
+        const upvotedList = getUpvotedItches();
+        const index = upvotedList.indexOf(id);
+        if (index === -1) {
+          // Add upvote
+          itch.upvotes++;
+          upvotedList.push(id);
+        } else {
+          // Remove upvote (toggle)
+          itch.upvotes = Math.max(0, itch.upvotes - 1);
+          upvotedList.splice(index, 1);
+        }
+        setUpvotedItches(upvotedList);
+        saveUpvoteToStorage(itch.id, itch.upvotes);
+        saveCustomItchesToStorage();
+        renderItches();
+      }
+    };
+
+    window.renderItches = function() {
+      const grid = document.getElementById('itches-grid');
+      if (!grid) return;
+
+      grid.innerHTML = '';
+
+      let sorted = [...projectItches];
+      if (currentItchFilter !== 'all') {
+        sorted = sorted.filter(i => i.category === currentItchFilter);
+      }
+
+      if (itchSearchQuery.trim()) {
+        const query = itchSearchQuery.toLowerCase().trim();
+        sorted = sorted.filter(i => i.title.toLowerCase().includes(query) || i.frustration.toLowerCase().includes(query));
+      }
+
+      if (sorted.length === 0) {
+        grid.innerHTML = `<div style="grid-column: span 3; text-align: center; color: var(--color-gray-500); padding: 40px;">No itches found matching "${itchSearchQuery}"</div>`;
+        return;
+      }
+
+      sorted.forEach(itch => {
+        const difficultyColor = itch.difficulty === 'Easy' ? '#10b981' : (itch.difficulty === 'Medium' ? '#f59e0b' : '#ef4444');
+        const painColor = itch.painScore >= 9.0 ? '#ef4444' : (itch.painScore >= 8.0 ? '#f59e0b' : '#3b82f6');
+        const painTier = itch.painScore >= 9.0 ? 'Critical' : (itch.painScore >= 8.0 ? 'High' : 'Moderate');
+
+        const card = document.createElement('div');
+        card.className = 'dash-card itch-card';
+        card.style.display = 'flex';
+        card.style.flexDirection = 'column';
+        card.style.justifyContent = 'space-between';
+        card.style.gap = '16px';
+        card.style.transition = 'all 0.3s ease';
+
+        const upvotedList = getUpvotedItches();
+        const hasUpvoted = upvotedList.includes(itch.id);
+        const upvoteActive = hasUpvoted ? 'active' : '';
+
+        card.innerHTML = `
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <div class="itch-avatar" style="width: 32px; height: 32px; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 14px;">
+                  🤖
+                </div>
+                <div>
+                  <span style="font-weight: 600; color: var(--color-white); font-size: 13px; display: block;">${itch.author}</span>
+                  <span style="font-size: 11px; color: var(--color-gray-500);">scraped via developer feed</span>
+                </div>
+              </div>
+              <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+                <span class="lang-badge" style="border-color: rgba(${hexToRgb(painColor.substring(1))}, 0.2); color: ${painColor}; font-size: 10px; font-weight: 700;">🔥 ${painTier} Pain (${itch.painScore})</span>
+                <span style="font-size: 10px; color: ${difficultyColor}; font-weight: 600;">${itch.difficulty}</span>
+              </div>
+            </div>
+
+            <p class="itch-frustration" style="font-size: 13.5px; line-height: 1.5; margin: 0 0 16px 0; font-family: var(--font-body); font-style: italic; padding-left: 12px; padding-top: 4px; padding-bottom: 4px;">
+              "${itch.frustration}"
+            </p>
+
+            <h3 class="itch-title" style="margin: 0 0 8px 0; border: none; padding: 0; font-size: 16px; font-family: var(--font-display);">${itch.title}</h3>
+            
+            <h4 class="itch-req-title" style="font-size: 12px; margin: 12px 0 6px 0; font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.05em;">Security Requirements</h4>
+            <ul class="itch-req-list" style="margin: 0; padding-left: 16px; font-size: 12px; line-height: 1.6;">
+              ${itch.requirements.map(r => `<li>${r}</li>`).join('')}
+            </ul>
+          </div>
+
+          <div class="itch-footer" style="display: flex; align-items: center; justify-content: space-between; padding-top: 14px; margin-top: 8px; gap: 8px;">
+            <button class="opt-btn ${upvoteActive}" onclick="upvoteItch(event, ${itch.id})" style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; padding: 4px 10px; border-radius: 6px; cursor: pointer; white-space: nowrap; flex-shrink: 0;">
+              🔺 Upvote <b>${itch.upvotes}</b>
+            </button>
+            <span class="itch-builders-text" style="font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">🛠️ <b>${itch.builders}</b> builders</span>
+            <button class="todo-add-btn" style="border-radius: 6px; padding: 6px 12px; font-size: 12px; cursor: pointer; white-space: nowrap; flex-shrink: 0;" onclick="switchView(null, 'ai-assistant'); useSuggestion('${itch.suggestion}')">
+              Scratch Itch
+            </button>
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
+    };
+    // 💬 Live Chat Community Logic
+    let activeChatChannel = 'general';
+    let chatTypingTimeout = null;
+    
+    const defaultChatMessages = {
+      general: [
+        {
+          id: 1,
+          author: "@argon2_dev",
+          avatar: "🥑",
+          role: "pro",
+          time: "10 mins ago",
+          text: "Welcome everyone to the secure coding forum! Feel free to ask questions about software security and vulnerabilities."
+        },
+        {
+          id: 2,
+          author: "@sec_wizard_99",
+          avatar: "🧙‍♂️",
+          role: "admin",
+          time: "7 mins ago",
+          text: "Reminder: Avoid pasting actual corporate secret keys or auth credentials in the chat. Use dummy variables for code snippets!"
+        },
+        {
+          id: 3,
+          author: "@python_learner",
+          avatar: "🐍",
+          role: "",
+          time: "3 mins ago",
+          text: "Hey! Has anyone figured out the buffer overflow practice problem in C++? The array copy boundaries are tripping me up."
+        }
+      ],
+      "security-alerts": [
+        {
+          id: 1,
+          author: "@sec_wizard_99",
+          avatar: "🧙‍♂️",
+          role: "admin",
+          time: "1 hour ago",
+          text: "🚨 Alert: A new prototype pollution vulnerability was discovered in package 'deep-extend'. Update your dependencies to v0.6.3+ immediately."
+        },
+        {
+          id: 2,
+          author: "@infra_janitor",
+          avatar: "🧹",
+          role: "pro",
+          time: "35 mins ago",
+          text: "Thanks for the heads up! Just verified our proxy pipelines and updated the lockfiles."
+        }
+      ],
+      "coding-help": [
+        {
+          id: 1,
+          author: "@python_learner",
+          avatar: "🐍",
+          role: "",
+          time: "20 mins ago",
+          text: "Can someone explain why recursion limits throw errors in Python compared to JS?"
+        },
+        {
+          id: 2,
+          author: "@argon2_dev",
+          avatar: "🥑",
+          role: "pro",
+          time: "15 mins ago",
+          text: "Python has a default recursion limit of 1000 to prevent C stack overflows. You can increase it using sys.setrecursionlimit(), but it's usually better to refactor using an iterative approach."
+        }
+      ],
+      feedback: [
+        {
+          id: 1,
+          author: "@user_dev",
+          avatar: "💻",
+          role: "",
+          time: "1 day ago",
+          text: "Love the new leaderboard! The LeetCode layout is very interactive. It makes competing so much more fun."
+        },
+        {
+          id: 2,
+          author: "@sec_wizard_99",
+          avatar: "🧙‍♂️",
+          role: "admin",
+          time: "18 hours ago",
+          text: "Awesome to hear! We're planning to add a chat-style community hub next so developers can discuss code in real-time."
+        }
+      ]
+    };
+
+    let chatMessages = {};
+    try {
+      const stored = localStorage.getItem('vericode_chat_messages');
+      if (stored) {
+        chatMessages = JSON.parse(stored);
+      } else {
+        chatMessages = JSON.parse(JSON.stringify(defaultChatMessages));
+      }
+    } catch(e) {
+      chatMessages = JSON.parse(JSON.stringify(defaultChatMessages));
+    }
+
+    window.switchChatChannel = function(channelId) {
+      activeChatChannel = channelId;
+      renderChat();
+    };
+
+    window.sendChatMessage = function(e) {
+      if (e) e.preventDefault();
+      
+      const input = document.getElementById('chat-input-field');
+      if (!input) return;
+      
+      const text = input.value.trim();
+      if (!text) return;
+      
+      let userHandle = "@user_dev";
+      let userAvatar = "💻";
+      
+      try {
+        const storedProfile = localStorage.getItem('vericode_profile');
+        if (storedProfile) {
+          const profile = JSON.parse(storedProfile);
+          userHandle = profile.username ? (profile.username.startsWith('@') ? profile.username : '@' + profile.username) : '@' + (profile.name ? profile.name.toLowerCase().replace(/\s+/g, '_') : 'user_dev');
+          if (profile.avatarId) {
+            const avatars = ["🥑", "🧙‍♂️", "🐍", "🦊"];
+            userAvatar = avatars[profile.avatarId - 1] || "💻";
+          }
+        }
+      } catch (err) {
+        console.error("Error loading user profile for chat:", err);
+      }
+      
+      const newMessage = {
+        id: Date.now(),
+        author: userHandle,
+        avatar: userAvatar,
+        role: "pro",
+        time: "Just now",
+        text: text
+      };
+      
+      if (!chatMessages[activeChatChannel]) {
+        chatMessages[activeChatChannel] = [];
+      }
+      
+      chatMessages[activeChatChannel].push(newMessage);
+      
+      try {
+        localStorage.setItem('vericode_chat_messages', JSON.stringify(chatMessages));
+      } catch(e) {}
+      
+      // Onboarding & activity trigger
+      localStorage.setItem('vericode_chat_joined', 'true');
+      if (typeof logRecentActivity === 'function') {
+        logRecentActivity(`Sent a message in <b>#${activeChatChannel}</b>`);
+      }
+      
+      input.value = '';
+      renderChat();
+      triggerMockReply();
+    };
+
+    window.renderChat = function() {
+      const channelsListContainer = document.getElementById('chat-channels-list');
+      if (!channelsListContainer) return;
+      
+      const channels = [
+        { id: 'general', name: 'general', desc: 'Discuss anything and everything secure coding.', icon: '💬' },
+        { id: 'security-alerts', name: 'security-alerts', desc: 'Vulnerability alerts, CVE warnings, and security news.', icon: '🚨' },
+        { id: 'coding-help', name: 'coding-help', desc: 'Get help with algorithms, compilers, and debugging code.', icon: '💻' },
+        { id: 'feedback', name: 'feedback', desc: 'Share app suggestions, feature feedback, and reviews.', icon: '📢' }
+      ];
+      
+      channelsListContainer.innerHTML = channels.map(ch => `
+        <button class="chat-channel-btn ${activeChatChannel === ch.id ? 'active' : ''}" onclick="switchChatChannel('${ch.id}')">
+          <span>${ch.icon}</span> #${ch.name}
+        </button>
+      `).join('');
+      
+      const currentChannel = channels.find(ch => ch.id === activeChatChannel);
+      document.getElementById('chat-active-channel-name').innerText = '#' + currentChannel.name;
+      document.getElementById('chat-active-channel-desc').innerText = currentChannel.desc;
+      
+      const msgsContainer = document.getElementById('chat-messages');
+      if (!msgsContainer) return;
+      
+      msgsContainer.innerHTML = '';
+      const list = chatMessages[activeChatChannel] || [];
+      
+      list.forEach(msg => {
+        const bubble = document.createElement('div');
+        bubble.className = 'chat-message-bubble';
+        
+        let roleTag = '';
+        if (msg.role === 'admin') {
+          roleTag = '<span class="chat-message-author-tag admin">Admin</span>';
+        } else if (msg.role === 'pro') {
+          roleTag = '<span class="chat-message-author-tag pro">Pro</span>';
+        }
+        
+        bubble.innerHTML = `
+          <div class="chat-message-avatar">${msg.avatar || '🤖'}</div>
+          <div class="chat-message-content-wrapper">
+            <div class="chat-message-meta">
+              <span class="chat-message-author">${msg.author}</span>
+              ${roleTag}
+              <span class="chat-message-time">${msg.time}</span>
+            </div>
+            <div class="chat-message-text">${msg.text}</div>
+          </div>
+        `;
+        msgsContainer.appendChild(bubble);
+      });
+      
+      msgsContainer.scrollTop = msgsContainer.scrollHeight;
+    };
+
+    function triggerMockReply() {
+      if (chatTypingTimeout) clearTimeout(chatTypingTimeout);
+      
+      const startTypingDelay = 1000 + Math.random() * 1000;
+      
+      chatTypingTimeout = setTimeout(() => {
+        const msgsContainer = document.getElementById('chat-messages');
+        if (!msgsContainer) return;
+        
+        const typingIndicator = document.createElement('div');
+        typingIndicator.id = 'chat-typing-indicator';
+        typingIndicator.className = 'chat-message-bubble';
+        typingIndicator.innerHTML = `
+          <div class="chat-message-avatar">💬</div>
+          <div class="chat-message-content-wrapper">
+            <div class="typing-indicator">
+              <span>Someone is typing</span>
+              <div class="typing-dot"></div>
+              <div class="typing-dot"></div>
+              <div class="typing-dot"></div>
+            </div>
+          </div>
+        `;
+        msgsContainer.appendChild(typingIndicator);
+        msgsContainer.scrollTop = msgsContainer.scrollHeight;
+        
+        const typingDuration = 2000 + Math.random() * 1500;
+        
+        chatTypingTimeout = setTimeout(() => {
+          const indicator = document.getElementById('chat-typing-indicator');
+          if (indicator) indicator.remove();
+          
+          const replies = {
+            general: [
+              { author: "@sec_wizard_99", avatar: "🧙‍♂️", role: "admin", text: "Nice point! We should definitely look into creating a security CTF (Capture The Flag) platform here." },
+              { author: "@argon2_dev", avatar: "🥑", role: "pro", text: "I agree. Secure coding practices are best learned through real-life simulations." },
+              { author: "@python_learner", avatar: "🐍", role: "", text: "Wow, that would be amazing! Let's do it." }
+            ],
+            "security-alerts": [
+              { author: "@infra_janitor", avatar: "🧹", role: "pro", text: "Also check your Docker files for base image vulnerabilities. Use alpine images where possible!" },
+              { author: "@sec_wizard_99", avatar: "🧙‍♂️", role: "admin", text: "Yes! Running `docker scout` or `trivy` in your CI/CD pipeline helps catch these early." }
+            ],
+            "coding-help": [
+              { author: "@argon2_dev", avatar: "🥑", role: "pro", text: "If you need reference templates, check out the solutions tab in the practice problems. The explanation there is detailed." },
+              { author: "@sec_wizard_99", avatar: "🧙‍♂️", role: "admin", text: "Also check out the OWASP Cheat Sheet Series, it has great guidelines for languages like Node, Python, and C++." }
+            ],
+            feedback: [
+              { author: "@sec_wizard_99", avatar: "🧙‍♂️", role: "admin", text: "Thanks for the feedback! We are constantly rolling out updates to keep Vericode as the ultimate platform." }
+            ]
+          };
+          
+          const list = replies[activeChatChannel] || [{ author: "@sec_wizard_99", avatar: "🧙‍♂️", role: "admin", text: "Awesome! Let me know if you have any questions." }];
+          const reply = list[Math.floor(Math.random() * list.length)];
+          
+          const mockMsg = {
+            id: Date.now(),
+            author: reply.author,
+            avatar: reply.avatar,
+            role: reply.role,
+            time: "Just now",
+            text: reply.text
+          };
+          
+          chatMessages[activeChatChannel].push(mockMsg);
+          
+          try {
+            localStorage.setItem('vericode_chat_messages', JSON.stringify(chatMessages));
+          } catch(e) {}
+          
+          renderChat();
+        }, typingDuration);
+      }, startTypingDelay);
+    }
+
+    function renderPracticeProblems() {
+      const tbody = document.getElementById('practice-problems-body');
+      if (!tbody) return;
+
+      tbody.innerHTML = '';
+
+      const filtered = practiceProblems.filter(prob => {
+        if (currentDifficultyFilter !== 'all' && prob.difficulty.toLowerCase() !== currentDifficultyFilter) return false;
+        if (currentStatusFilter !== 'all') {
+          if (currentStatusFilter === 'solved' && !prob.solved) return false;
+          if (currentStatusFilter === 'todo' && prob.solved) return false;
+        }
+        if (currentSearchQuery) {
+          const query = currentSearchQuery.toLowerCase();
+          const matchTitle = prob.title.toLowerCase().includes(query);
+          const matchNumber = prob.number.includes(query);
+          const matchTopics = prob.topics.some(t => t.toLowerCase().includes(query));
+          if (!matchTitle && !matchNumber && !matchTopics) return false;
+        }
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align: center; padding: 40px; color: var(--color-gray-500);">
+              No problems found matching filters.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      filtered.forEach(prob => {
+        const tr = document.createElement('tr');
+        tr.style.borderBottom = '1px solid var(--color-gray-900)';
+        tr.style.cursor = 'pointer';
+        tr.className = 'practice-row';
+        tr.onclick = () => loadProblemWorkspace(prob.id);
+        
+        const diffColor = prob.difficulty === 'Easy' ? '#10b981' : (prob.difficulty === 'Medium' ? '#f59e0b' : '#ef4444');
+        const statusIcon = prob.solved ? 
+          `<svg style="width: 18px; height: 18px; color: #10b981; fill: currentColor;" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>` : 
+          `<svg style="width: 18px; height: 18px; color: var(--color-gray-600);" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>`;
+
+        tr.innerHTML = `
+          <td style="padding: 14px 16px; text-align: center;" onclick="event.stopPropagation(); toggleProblemSolved(${prob.id})">
+            ${statusIcon}
+          </td>
+          <td style="padding: 14px 16px; font-weight: 600; color: var(--color-white);">
+            ${prob.number}. ${prob.title}
+          </td>
+          <td style="padding: 14px 16px;">
+            ${prob.topics.map(t => `<span class="lang-badge" style="font-size: 11px; margin-right: 4px; border-color: rgba(255,255,255,0.06);">${t}</span>`).join('')}
+          </td>
+          <td style="padding: 14px 16px; color: var(--color-gray-400);">
+            ${prob.acceptance}
+          </td>
+          <td style="padding: 14px 16px; font-weight: 600; color: ${diffColor};">
+            ${prob.difficulty}
+          </td>
+          <td style="padding: 14px 16px; text-align: right;" onclick="event.stopPropagation();">
+            <button class="todo-add-btn" style="padding: 6px 12px; font-size: 12px; border-radius: 4px; cursor: pointer;" onclick="loadProblemWorkspace(${prob.id}, 'hints')">
+              ${prob.topics.includes('Security') ? 'Audit Code' : 'Solve with AI'}
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    window.toggleProblemSolved = function(id) {
+      const prob = practiceProblems.find(p => p.id === id);
+      if (prob) {
+        prob.solved = !prob.solved;
+        if (prob.solved) {
+          if (typeof updateStreakOnSolve === 'function') updateStreakOnSolve();
+          if (typeof logRecentActivity === 'function') {
+            logRecentActivity(`Completed Practice problem: <b>"${prob.title}"</b> (${prob.difficulty})`);
+          }
+        } else {
+          if (typeof logRecentActivity === 'function') {
+            logRecentActivity(`Marked Practice problem unsolved: <b>"${prob.title}"</b>`);
+          }
+        }
+        renderPracticeProblems();
+        updateDashboardStats();
+        // Sync open workspace if active
+        if (currentProblemId === id) {
+          const subBtn = document.getElementById('tab-btn-submissions');
+          if (subBtn && subBtn.classList.contains('active')) {
+            renderWorkspaceSubmissions();
+          }
+        }
+      }
+    };
+
+    window.solveProblemWithAI = function(suggestion) {
+      switchView(null, 'ai-assistant');
+      useSuggestion(suggestion);
+      // Also close drawer if open
+      document.getElementById('problem-drawer').style.display = 'none';
+    };
+
+    window.openProblemDrawer = function(id) {
+      const prob = practiceProblems.find(p => p.id === id);
+      if (!prob) return;
+
+      const drawer = document.getElementById('problem-drawer');
+      const drawerTitle = document.getElementById('drawer-title');
+      const drawerContent = document.getElementById('drawer-content');
+      
+      const diffColor = prob.difficulty === 'Easy' ? '#10b981' : (prob.difficulty === 'Medium' ? '#f59e0b' : '#ef4444');
+
+      drawerTitle.innerText = `${prob.number}. ${prob.title}`;
+      drawerContent.innerHTML = `
+        <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 18px;">
+          <span style="font-weight: 700; color: ${diffColor};">${prob.difficulty}</span>
+          <span class="lang-badge" style="border-color: rgba(255,255,255,0.06); font-size: 11px;">Acceptance: ${prob.acceptance}</span>
+        </div>
+        <div style="margin-bottom: 20px;">
+          <h4 style="font-size: 14px; margin-bottom: 8px; color: var(--color-white);">Description</h4>
+          <p>${prob.description}</p>
+        </div>
+        <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 14px; border-radius: 8px; margin-bottom: 24px; font-family: var(--font-body);">
+          <h4 style="font-size: 13px; margin-bottom: 6px; color: var(--color-white);">Example Case</h4>
+          <p style="margin: 0; font-size: 12.5px;">${prob.example}</p>
+        </div>
+        <div style="display: flex; gap: 10px; width: 100%;">
+          <button class="todo-add-btn" style="flex: 1; padding: 10px 14px; border-radius: 6px; font-size: 13px;" onclick="toggleProblemSolved(${prob.id}); openProblemDrawer(${prob.id});">
+            ${prob.solved ? 'Mark Unsolved' : 'Mark Solved'}
+          </button>
+          <button class="todo-add-btn" style="flex: 1; background: #2563eb; border-color: #2563eb; color: var(--color-white); padding: 10px 14px; border-radius: 6px; font-size: 13px;" onclick="solveProblemWithAI('${prob.suggestion}')">
+            Solve with AI
+          </button>
+        </div>
+      `;
+
+      drawer.style.display = 'block';
+    };
+
+    // Close drawer logic
+    const drawerCloseBtn = document.getElementById('drawer-close');
+    if (drawerCloseBtn) {
+      drawerCloseBtn.addEventListener('click', () => {
+        document.getElementById('problem-drawer').style.display = 'none';
+      });
+    }
+
+    // LeetCode Coding Workspace Controllers
+    window.exitProblemWorkspace = function() {
+      switchView(null, 'practice');
+    };
+
+    window.loadProblemWorkspace = function(problemId, defaultTab = 'desc') {
+      const drawer = document.getElementById('problem-drawer');
+      if (drawer) drawer.style.display = 'none';
+
+      currentProblemId = problemId;
+      const prob = practiceProblems.find(p => p.id === problemId);
+      if (!prob) return;
+
+      // SPA Switch: Hide all other panels
+      document.getElementById('view-dashboard').style.display = 'none';
+      document.getElementById('view-ai-assistant').style.display = 'none';
+      document.getElementById('view-code-sandbox').style.display = 'none';
+      document.getElementById('view-learning').style.display = 'none';
+      document.getElementById('view-practice').style.display = 'none';
+      document.getElementById('view-leaderboard').style.display = 'none';
+      document.getElementById('view-community').style.display = 'none';
+
+      // Show workspace view
+      document.getElementById('view-problem-workspace').style.display = 'block';
+
+      // Set problem header
+      document.getElementById('workspace-title').innerText = `${prob.number}. ${prob.title}`;
+      
+      const diffBadge = document.getElementById('workspace-difficulty');
+      diffBadge.innerText = prob.difficulty;
+      diffBadge.className = '';
+      if (prob.difficulty === 'Easy') diffBadge.className = 'diff-badge-easy';
+      else if (prob.difficulty === 'Medium') diffBadge.className = 'diff-badge-medium';
+      else if (prob.difficulty === 'Hard') diffBadge.className = 'diff-badge-hard';
+
+      document.getElementById('workspace-acceptance').innerText = prob.acceptance;
+      
+      const topicsContainer = document.getElementById('workspace-topics');
+      topicsContainer.innerHTML = prob.topics.map(t => `<span class="lang-badge" style="font-size: 11px; margin-right: 4px; border-color: rgba(255,255,255,0.06);">${t}</span>`).join('');
+
+      // Populate description text
+      document.getElementById('workspace-description-text').innerHTML = prob.description;
+
+      const examplesContainer = document.getElementById('workspace-examples-container');
+      examplesContainer.innerHTML = `
+        <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 14px; border-radius: 8px; font-family: var(--font-body);">
+          <h4 style="font-size: 13px; margin-bottom: 6px; color: var(--color-white); font-family: var(--font-display);">Example Case</h4>
+          <p style="margin: 0; font-size: 12.5px; line-height: 1.6; font-family: var(--font-code);">${prob.example}</p>
+        </div>
+      `;
+
+      const constraintsList = document.getElementById('workspace-constraints');
+      if (prob.topics.includes('Security')) {
+        constraintsList.innerHTML = `
+          <li>Code must pass dynamic taint analysis checks.</li>
+          <li>Do not use deprecated or unsafe execution utilities (e.g. <code>strcpy</code>, raw concatenating queries).</li>
+          <li>Properly initialize state bounds before parsing or copying data.</li>
+        `;
+      } else {
+        constraintsList.innerHTML = `
+          <li>Constraints: <code>1 <= input.length <= 10<sup>4</sup></code></li>
+          <li>Time Complexity target: <code>O(N log N)</code> or better.</li>
+          <li>Space Complexity: <code>O(N)</code> maximum.</li>
+        `;
+      }
+
+      document.getElementById('workspace-security-hint').innerText = prob.suggestion;
+
+      // Populate solutions tab
+      const sol = problemSolutions[problemId] || { explanation: "No solution explanation available.", snippet: "// Code here" };
+      document.getElementById('workspace-solution-explanation').innerHTML = sol.explanation;
+      document.getElementById('workspace-solution-snippet').innerText = sol.snippet;
+
+      // Set language select value to match currentLanguage
+      const langSelect = document.getElementById('workspace-language-select');
+      langSelect.value = currentLanguage;
+      
+      const codeArea = document.getElementById('workspace-code-textarea');
+      codeArea.value = userWorkspaceCodes[problemId][currentLanguage];
+
+      // Reset console panels
+      document.getElementById('console-tab-res-content').style.display = 'none';
+      document.getElementById('console-tab-tc-content').style.display = 'flex';
+      document.getElementById('console-tab-btn-tc').classList.add('active');
+      document.getElementById('console-tab-btn-res').classList.remove('active');
+      
+      // Default Testcase value
+      const tcInput = document.getElementById('console-testcase-input');
+      if (problemId === 1) tcInput.value = "nums = [2,7,11,15], target = 9";
+      else if (problemId === 2) tcInput.value = "l1 = [2,4,3], l2 = [5,6,4]";
+      else if (problemId === 3) tcInput.value = 's = "abcabcbb"';
+      else if (problemId === 4) tcInput.value = 'xml = "<!DOCTYPE foo [ <!ENTITY xxe SYSTEM \\"file:///etc/passwd\\"> ]><foo>&xxe;</foo>"';
+      else if (problemId === 5) tcInput.value = 'username = "admin\' OR \'1\'=\'1\", password = \"xyz\"';
+      else if (problemId === 6) tcInput.value = 's = "babad"';
+      else if (problemId === 7) tcInput.value = 'input = "A" * 100, buffer_size = 16';
+      else if (problemId === 8) tcInput.value = 's = "aa", p = "a*"';
+
+      renderWorkspaceSubmissions();
+      switchWorkspaceTab(defaultTab);
+      onWorkspaceCodeInput();
+    };
+
+    window.switchWorkspaceTab = function(tabName) {
+      document.getElementById('tab-btn-desc').classList.remove('active');
+      document.getElementById('tab-btn-hints').classList.remove('active');
+      document.getElementById('tab-btn-solutions').classList.remove('active');
+      document.getElementById('tab-btn-submissions').classList.remove('active');
+
+      document.getElementById('workspace-tab-desc').style.display = 'none';
+      document.getElementById('workspace-tab-hints').style.display = 'none';
+      document.getElementById('workspace-tab-solutions').style.display = 'none';
+      document.getElementById('workspace-tab-submissions').style.display = 'none';
+
+      document.getElementById('tab-btn-' + tabName).classList.add('active');
+      document.getElementById('workspace-tab-' + tabName).style.display = 'block';
+    };
+
+    window.changeWorkspaceLanguage = function() {
+      if (!currentProblemId) return;
+      const langSelect = document.getElementById('workspace-language-select');
+      
+      // Save current draft
+      const codeArea = document.getElementById('workspace-code-textarea');
+      userWorkspaceCodes[currentProblemId][currentLanguage] = codeArea.value;
+
+      // Switch to new language draft
+      currentLanguage = langSelect.value;
+      codeArea.value = userWorkspaceCodes[currentProblemId][currentLanguage];
+      onWorkspaceCodeInput();
+    };
+
+    window.resetWorkspaceCode = function() {
+      if (!currentProblemId) return;
+      if (confirm("Reset code editor to starter template? Your edits will be lost.")) {
+        const codeArea = document.getElementById('workspace-code-textarea');
+        codeArea.value = problemTemplates[currentProblemId][currentLanguage];
+        userWorkspaceCodes[currentProblemId][currentLanguage] = codeArea.value;
+        onWorkspaceCodeInput();
+      }
+    };
+
+    window.onWorkspaceCodeInput = function() {
+      const codeArea = document.getElementById('workspace-code-textarea');
+      const linesContainer = document.getElementById('editor-line-numbers');
+      if (!codeArea || !linesContainer) return;
+
+      const lines = codeArea.value.split('\n');
+      const lineCount = lines.length;
+      
+      let html = '';
+      for (let i = 1; i <= lineCount; i++) {
+        html += `<div>${i}</div>`;
+      }
+      linesContainer.innerHTML = html;
+      linesContainer.scrollTop = codeArea.scrollTop;
+    };
+
+    window.onWorkspaceCodeScroll = function() {
+      const codeArea = document.getElementById('workspace-code-textarea');
+      const linesContainer = document.getElementById('editor-line-numbers');
+      if (codeArea && linesContainer) {
+        linesContainer.scrollTop = codeArea.scrollTop;
+      }
+    };
+
+    let isConsoleExpanded = true;
+    window.toggleWorkspaceConsole = function() {
+      const panel = document.getElementById('workspace-console-panel');
+      const arrow = document.getElementById('console-arrow-icon');
+      if (isConsoleExpanded) {
+        panel.style.height = '36px';
+        arrow.style.transform = 'rotate(180deg)';
+      } else {
+        panel.style.height = '180px';
+        arrow.style.transform = 'rotate(0deg)';
+      }
+      isConsoleExpanded = !isConsoleExpanded;
+    };
+
+    window.switchConsoleTab = function(consoleTab) {
+      document.getElementById('console-tab-btn-tc').classList.remove('active');
+      document.getElementById('console-tab-btn-res').classList.remove('active');
+      document.getElementById('console-tab-tc-content').style.display = 'none';
+      document.getElementById('console-tab-res-content').style.display = 'none';
+
+      document.getElementById('console-tab-btn-' + consoleTab).classList.add('active');
+      document.getElementById('console-tab-' + consoleTab + '-content').style.display = 'flex';
+    };
+
+    function renderWorkspaceSubmissions() {
+      const list = document.getElementById('workspace-submissions-list');
+      if (!list) return;
+
+      const filtered = sessionSubmissions.filter(s => s.problemId === currentProblemId);
+      if (filtered.length === 0) {
+        list.innerHTML = `
+          <div style="color: var(--color-gray-500); text-align: center; padding: 20px; font-size: 13px;">
+            No submissions yet for this session. Submit your code to check validation!
+          </div>
+        `;
+        return;
+      }
+
+      list.innerHTML = filtered.reverse().map(sub => {
+        const isAccepted = sub.status === "Accepted";
+        const color = isAccepted ? "#10b981" : "#ef4444";
+        return `
+          <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 12px; border-radius: 6px; display: flex; align-items: center; justify-content: space-between; font-size: 13px;">
+            <div>
+              <div style="font-weight: 700; color: ${color}; font-family: var(--font-display);">${sub.status}</div>
+              <div style="font-size: 11px; color: var(--color-gray-500); margin-top: 2px;">
+                ${sub.language} • ${sub.timestamp}
+              </div>
+            </div>
+            <div style="text-align: right; font-family: var(--font-code); font-size: 12px; color: var(--color-gray-300);">
+              Runtime: ${sub.runtime} <br>
+              Memory: ${sub.memory}
+            </div>
+          </div>
+        `;
+      }).join('');
+      
+      // Reset list cursor scroll
+      list.scrollTop = 0;
+    }
+
+    // --- Functional Code Runner Sandbox & Utilities ---
+
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return "";
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function parseConsoleTestCase(tcString) {
+      if (!tcString) return {};
+      let jsExpr = tcString
+        .replace(/"([^"]*)"\s*\*\s*(\d+)/g, '"$1".repeat($2)')
+        .replace(/'([^']*)'\s*\*\s*(\d+)/g, "'$1'.repeat($2)")
+        .replace(/\bNone\b/g, 'null')
+        .replace(/\bTrue\b/g, 'true')
+        .replace(/\bFalse\b/g, 'false');
+      
+      const allowedVars = ['nums', 'target', 'l1', 'l2', 's', 'p', 'xml', 'username', 'password', 'input', 'buffer_size', 'xml_string', 'xmlString', 'xmlContent', 'connection', 'usernameHash', 'passwordHash', 'db', 'user', 'passHash', 'conn', 'src', 'dest_size', 'destLimit', 'srcString', 'dest'];
+      
+      let decls = allowedVars.map(v => `let ${v} = undefined;`).join(' ');
+      let returnObj = `return { ${allowedVars.join(', ')} };`;
+      
+      try {
+        let fn = new Function(`${decls} try { ${jsExpr}; } catch(e){} ${returnObj}`);
+        let result = fn();
+        let parsed = {};
+        for (let k in result) {
+          if (result[k] !== undefined) {
+            parsed[k] = result[k];
+          }
+        }
+        return parsed;
+      } catch (e) {
+        console.error("Error parsing testcase:", e);
+        return {};
+      }
+    }
+
+    function unindentCode(code) {
+      let lines = code.split('\n');
+      let minIndent = Infinity;
+      for (let line of lines) {
+        if (line.trim() && !line.trim().startsWith('#')) {
+          let indent = line.length - line.trimStart().length;
+          if (indent < minIndent) minIndent = indent;
+        }
+      }
+      if (minIndent > 0 && minIndent !== Infinity) {
+        return lines.map(line => line.slice(minIndent)).join('\n');
+      }
+      return code;
+    }
+
+    function transpilePythonToJS(pythonCode) {
+      let lines = pythonCode.split('\n');
+      let jsLines = [];
+      let indentStack = [0];
+      
+      for (let i = 0; i < lines.length; i++) {
+        let line = lines[i];
+        let trimmed = line.trim();
+        if (!trimmed) {
+          jsLines.push('');
+          continue;
+        }
+        if (trimmed.startsWith('#')) {
+          jsLines.push('//' + trimmed.slice(1));
+          continue;
+        }
+        
+        let indent = line.length - line.trimStart().length;
+        
+        while (indentStack.length > 1 && indent < indentStack[indentStack.length - 1]) {
+          indentStack.pop();
+          let pad = ' '.repeat(indentStack[indentStack.length - 1]);
+          jsLines.push(pad + '}');
+        }
+        
+        let isBlock = trimmed.endsWith(':');
+        let lineContent = isBlock ? trimmed.slice(0, -1) : trimmed;
+        
+        if (lineContent.startsWith('def ')) {
+          lineContent = lineContent.replace(/\bdef\b/, 'function');
+          lineContent = lineContent.replace(/\bself\s*,\s*/, '').replace(/\bself\b/, '');
+          lineContent = lineContent.replace(/->\s*[A-Za-z0-9_\[\]\s|]+$/, '');
+          
+          let openParen = lineContent.indexOf('(');
+          let closeParen = lineContent.lastIndexOf(')');
+          if (openParen !== -1 && closeParen !== -1) {
+            let params = lineContent.slice(openParen + 1, closeParen);
+            let cleanedParams = params.split(',').map(p => {
+              let parts = p.split(':');
+              return parts[0].trim();
+            }).join(', ');
+            lineContent = lineContent.slice(0, openParen + 1) + cleanedParams + lineContent.slice(closeParen);
+          }
+        }
+        
+        lineContent = lineContent
+          .replace(/\bTrue\b/g, 'true')
+          .replace(/\bFalse\b/g, 'false')
+          .replace(/\bNone\b/g, 'null')
+          .replace(/\band\b/g, '&&')
+          .replace(/\bor\b/g, '||')
+          .replace(/\bnot\b/g, '!')
+          .replace(/\belif\b/g, 'else if');
+          
+        lineContent = lineContent.replace(/([A-Za-z0-9_.]+)\s*\/\/\s*([A-Za-z0-9_.]+)/g, 'Math.floor($1 / $2)');
+        
+        let enumMatch = lineContent.match(/for\s+(\w+)\s*,\s*(\w+)\s+in\s+enumerate\((.+)\)/);
+        if (enumMatch) {
+          lineContent = `for (let [${enumMatch[1]}, ${enumMatch[2]}] of enumerate(${enumMatch[3]}))`;
+        } else {
+          let rangeLenMatch = lineContent.match(/for\s+(\w+)\s+in\s+range\(len\((.+)\)\)/);
+          if (rangeLenMatch) {
+            lineContent = `for (let ${rangeLenMatch[1]} = 0; ${rangeLenMatch[1]} < len(${rangeLenMatch[2]}); ${rangeLenMatch[1]}++)`;
+          } else {
+            let rangeMatch = lineContent.match(/for\s+(\w+)\s+in\s+range\((.+)\)/);
+            if (rangeMatch) {
+              lineContent = `for (let ${rangeMatch[1]} of range(${rangeMatch[2]}))`;
+            } else {
+              let inMatch = lineContent.match(/for\s+(\w+)\s+in\s+(.+)/);
+              if (inMatch) {
+                lineContent = `for (let ${inMatch[1]} of ${inMatch[2]})`;
+              }
+            }
+          }
+        }
+
+        let inConditionMatch = lineContent.match(/if\s+(.+)\s+in\s+(.+)/);
+        if (inConditionMatch) {
+          lineContent = `if (${inConditionMatch[2]}.hasOwnProperty ? ${inConditionMatch[2]}.hasOwnProperty(${inConditionMatch[1]}) : (${inConditionMatch[1]} in ${inConditionMatch[2]}))`;
+        }
+
+        lineContent = lineContent.replace(/#.*$/, '');
+
+        let pad = ' '.repeat(indent);
+        if (isBlock) {
+          jsLines.push(pad + lineContent + ' {');
+          indentStack.push(indent + 4);
+        } else {
+          jsLines.push(pad + lineContent + ';');
+        }
+      }
+      
+      while (indentStack.length > 1) {
+        indentStack.pop();
+        jsLines.push(' '.repeat(indentStack[indentStack.length - 1]) + '}');
+      }
+      
+      return jsLines.join('\n');
+    }
+
+    function stripClassDefinition(code) {
+      if (!code) return "";
+      let classRegex = /class\s+\w+\s*(?::\s*(?:public|private|protected)\s+\w+)?\s*\{/;
+      let match = code.match(classRegex);
+      if (!match) return code;
+      
+      let startIndex = match.index;
+      let braceIndex = startIndex + match[0].length - 1;
+      
+      let depth = 1;
+      let endIndex = -1;
+      for (let i = braceIndex + 1; i < code.length; i++) {
+        if (code[i] === '{') depth++;
+        else if (code[i] === '}') {
+          depth--;
+          if (depth === 0) {
+            endIndex = i;
+            break;
+          }
+        }
+      }
+      
+      if (endIndex !== -1) {
+        return code.slice(braceIndex + 1, endIndex);
+      }
+      return code;
+    }
+
+    function transpileCppToJS(codeText) {
+      let code = codeText;
+      code = code.replace(/public\s*:/g, '');
+      code = code.replace(/private\s*:/g, '');
+      code = code.replace(/\bnullptr\b/g, 'null');
+      code = code.replace(/\bNULL\b/g, 'null');
+      code = code.replace(/\bstd::/g, '');
+      
+      code = code.replace(/unordered_map\s*<[^>]+>\s+(\w+)\s*;/g, 'let $1 = {};');
+      code = code.replace(/map\s*<[^>]+>\s+(\w+)\s*;/g, 'let $1 = {};');
+      code = code.replace(/vector\s*<[^>]+>\s+(\w+)\s*;/g, 'let $1 = [];');
+      code = code.replace(/return\s*\{([^}]+)\}\s*;/g, 'return [$1];');
+      
+      const cppTypes = ['vector\\s*<\\s*int\\s*>&?', 'vector\\s*<\\s*int\\s*>', 'int', 'string', 'ListNode\\s*\\*?', 'bool', 'void', 'size_t', 'char\\s*\\*', 'const char\\s*\\*'];
+      cppTypes.forEach(t => {
+        let reSig = new RegExp('\\b' + t + '\\b', 'g');
+        code = code.replace(reSig, '');
+      });
+      
+      code = code.replace(/(\w+)\s*\(([^)]*)\)\s*\{/g, 'function $1($2) {');
+      return code;
+    }
+
+    function transpileJavaToJS(codeText) {
+      let code = codeText;
+      code = code.replace(/Map\s*<[^>]+>\s+(\w+)\s*=\s*new\s+HashMap\s*<[^>]*>\s*\(\s*\)\s*;/g, 'let $1 = new Map();');
+      code = code.replace(/HashMap\s*<[^>]+>\s+(\w+)\s*=\s*new\s+HashMap\s*<[^>]*>\s*\(\s*\)\s*;/g, 'let $1 = new Map();');
+      code = code.replace(/\b(\w+)\.put\(([^,]+),\s*([^)]+)\)/g, '$1.set($2, $3)');
+      code = code.replace(/\b(\w+)\.containsKey\(([^)]+)\)/g, '$1.has($2)');
+      code = code.replace(/\b(\w+)\.get\(([^)]+)\)/g, '$1.get($2)');
+      code = code.replace(/new\s+\w+\[\]\s*\{([^}]+)\}/g, '[$1]');
+      code = code.replace(/new\s+\w+\[\d+\]/g, '[]');
+      
+      const javaTypes = ['public', 'private', 'protected', 'static', 'final', 'int\\[\\]', 'int', 'String', 'ListNode', 'boolean', 'double', 'float', 'void'];
+      javaTypes.forEach(t => {
+        let re = new RegExp('\\b' + t + '\\b', 'g');
+        code = code.replace(re, '');
+      });
+      
+      code = code.replace(/(\w+)\s*\(([^)]*)\)\s*\{/g, 'function $1($2) {');
+      return code;
+    }
+
+    function transpileToJS(codeText, language, problemId) {
+      let code = codeText;
+      if (language === 'python') {
+        code = code.replace(/class\s+\w+(\([^\)]+\))?\s*:/g, '');
+        code = unindentCode(code);
+        return transpilePythonToJS(code);
+      }
+      if (language === 'cpp') {
+        code = stripClassDefinition(code);
+        return transpileCppToJS(code);
+      }
+      if (language === 'java') {
+        code = stripClassDefinition(code);
+        return transpileJavaToJS(code);
+      }
+      return code;
+    }
+
+    function isXXESecure(codeText) {
+      const lowercaseCode = codeText.toLowerCase();
+      return (
+        lowercaseCode.includes("disallow-doctype-decl") ||
+        lowercaseCode.includes("external-general-entities") ||
+        lowercaseCode.includes("external-parameter-entities") ||
+        lowercaseCode.includes("resolve_entities=false") ||
+        lowercaseCode.includes("forbid_dtd=true") ||
+        lowercaseCode.includes("setfeature") ||
+        lowercaseCode.includes("dbf") ||
+        lowercaseCode.includes("parse_xml_safely") ||
+        lowercaseCode.includes("defusedxml") ||
+        lowercaseCode.includes("noent: false") ||
+        lowercaseCode.includes("entityresolution") ||
+        lowercaseCode.includes("disabledefaultentityresolution")
+      );
+    }
+
+    function isSQLISecure(codeText) {
+      const lowercaseCode = codeText.toLowerCase();
+      return (
+        lowercaseCode.includes("?") ||
+        lowercaseCode.includes("prepare") ||
+        lowercaseCode.includes("prepared") ||
+        lowercaseCode.includes("parameterized") ||
+        (lowercaseCode.includes("db.execute") && lowercaseCode.includes(",")) ||
+        (lowercaseCode.includes("execute") && lowercaseCode.includes(",") && !lowercaseCode.includes("+") && !lowercaseCode.includes("%") && !lowercaseCode.includes("{"))
+      );
+    }
+
+    function isBufferOverflowSecure(codeText) {
+      const lowercaseCode = codeText.toLowerCase();
+      return (
+        lowercaseCode.includes("strncpy") ||
+        lowercaseCode.includes("memcpy") ||
+        lowercaseCode.includes("min") ||
+        lowercaseCode.includes("destsize") ||
+        lowercaseCode.includes("dest_limit") ||
+        lowercaseCode.includes("sizeof") ||
+        lowercaseCode.includes("safe_copy") ||
+        lowercaseCode.includes("safebuffercopy")
+      );
+    }
+
+    function isEqual(actual, expected) {
+      if (Array.isArray(expected)) {
+        if (!Array.isArray(actual)) return false;
+        if (actual.length !== expected.length) return false;
+        let sortedActual = [...actual].sort((a,b)=>a-b);
+        let sortedExpected = [...expected].sort((a,b)=>a-b);
+        return sortedActual.every((val, idx) => val === sortedExpected[idx]);
+      }
+      return actual === expected;
+    }
+
+    function isMatchExpected(actual, expected) {
+      if (Array.isArray(expected)) {
+        if (typeof actual === "string" && expected.some(exp => exp === actual)) {
+          return true;
+        }
+        return isEqual(actual, expected);
+      }
+      return actual === expected;
+    }
+
+    const ListNodeStr = `
+      class ListNode {
+        constructor(val, next) {
+          this.val = (val === undefined ? 0 : val);
+          this.next = (next === undefined ? null : next);
+        }
+      }
+    `;
+
+    const listHelpersStr = `
+      function arrayToList(arr) {
+        if (!arr || arr.length === 0) return null;
+        let dummy = new ListNode(0);
+        let curr = dummy;
+        for (let val of arr) {
+          curr.next = new ListNode(val);
+          curr = curr.next;
+        }
+        return dummy.next;
+      }
+
+      function listToArray(head) {
+        let arr = [];
+        let curr = head;
+        while (curr) {
+          arr.push(curr.val);
+          curr = curr.next;
+        }
+        return arr;
+      }
+    `;
+
+    const pythonHelpersStr = `
+      function len(obj) {
+        if (obj === null || obj === undefined) return 0;
+        return obj.length !== undefined ? obj.length : (obj.size !== undefined ? obj.size : Object.keys(obj).length);
+      }
+
+      function min(...args) {
+        if (args.length === 1 && Array.isArray(args[0])) return Math.min(...args[0]);
+        return Math.min(...args);
+      }
+
+      function max(...args) {
+        if (args.length === 1 && Array.isArray(args[0])) return Math.max(...args[0]);
+        return Math.max(...args);
+      }
+
+      function range(start, stop, step) {
+        if (stop === undefined) {
+          stop = start;
+          start = 0;
+        }
+        step = step || 1;
+        let result = [];
+        for (let i = start; step > 0 ? i < stop : i > stop; i += step) {
+          result.push(i);
+        }
+        return result;
+      }
+
+      function enumerate(arr) {
+        if (!arr) return [];
+        return arr.map((val, idx) => [idx, val]);
+      }
+    `;
+
+    function executeUserCode(codeText, language, problemId, inputs) {
+      if (problemId === 4) {
+        let inputXml = inputs.xml || inputs.xml_string || inputs.xmlString || inputs.xmlContent || "";
+        let secure = isXXESecure(codeText);
+        if (inputXml.includes("<!DOCTYPE") || inputXml.includes("<!ENTITY") || inputXml.includes("SYSTEM")) {
+          if (secure) {
+            return "ParserException: External entities are disabled.";
+          } else {
+            return "xml_content = '<foo>admin:x:0:0:root:/root:/bin/bash</foo>' (XXE Leak Success)";
+          }
+        } else {
+          return inputXml.replace(/<[^>]+>/g, "").trim() || inputXml;
+        }
+      }
+      
+      if (problemId === 5) {
+        let uName = inputs.username || "";
+        let pWord = inputs.password || "";
+        let secure = isSQLISecure(codeText);
+        let isInjection = uName.includes("'") || uName.toLowerCase().includes("or") || pWord.includes("'");
+        if (isInjection) {
+          if (secure) {
+            return "Authentication failed (Safe prepared statement executed)";
+          } else {
+            return "User Logged In: admin (SQL Injection vulnerability triggered)";
+          }
+        } else {
+          if (uName === "admin" && (pWord === "password123" || pWord === "xyz")) {
+            return "User Logged In: admin";
+          } else {
+            return "Authentication failed";
+          }
+        }
+      }
+      
+      if (problemId === 7) {
+        let srcVal = inputs.input || inputs.src || inputs.srcString || "";
+        let bufSize = inputs.buffer_size || inputs.destLimit || inputs.destSize || 16;
+        let secure = isBufferOverflowSecure(codeText);
+        if (srcVal.length >= bufSize) {
+          if (secure) {
+            return "CompileError/ExecutionBlocked: Safe copy bound exceeded.";
+          } else {
+            return "Segmentation Fault (Buffer Overflow Success)";
+          }
+        } else {
+          return srcVal;
+        }
+      }
+
+      let jsCode = transpileToJS(codeText, language, problemId);
+      
+      let checkNames = [
+        'twoSum', 'addTwoNumbers', 'lengthOfLongestSubstring', 
+        'parseXmlSafely', 'parseXMLSafely', 'parse_xml_safely',
+        'authenticateUser', 'authenticate_user',
+        'longestPalindrome',
+        'safeBufferCopy', 'safeStringCopy', 'safe_copy',
+        'isMatch'
+      ];
+
+      let findFunctionStr = `
+        let fn = null;
+        const names = ${JSON.stringify(checkNames)};
+        for (let name of names) {
+          try {
+            let val = eval(name);
+            if (typeof val === "function") {
+              fn = val;
+              break;
+            }
+          } catch(e){}
+        }
+        if (!fn) {
+          const classNames = ["Solution", "XMLParser", "SecureXMLParser", "LoginHandler", "SafeMemoryCopy"];
+          for (let cName of classNames) {
+            try {
+              let Cls = eval(cName);
+              if (typeof Cls === "function") {
+                let inst = new Cls();
+                for (let name of names) {
+                  if (typeof inst[name] === "function") {
+                    fn = inst[name].bind(inst);
+                    break;
+                  }
+                }
+              }
+            } catch(e){}
+            if (fn) break;
+          }
+        }
+        return fn;
+      `;
+
+      let wrappedCode = ListNodeStr + "\n" + listHelpersStr + "\n" + pythonHelpersStr + "\n" + jsCode + "\n" + findFunctionStr;
+      
+      let fn = eval("(function() {\n" + wrappedCode + "\n})()");
+      if (!fn) {
+        throw new Error("Could not find the target entry function/method in your code.");
+      }
+      
+      if (problemId === 1) {
+        return fn(inputs.nums, inputs.target);
+      }
+      if (problemId === 2) {
+        let list1 = arrayToList(inputs.l1);
+        let list2 = arrayToList(inputs.l2);
+        let resList = fn(list1, list2);
+        return listToArray(resList);
+      }
+      if (problemId === 3) {
+        return fn(inputs.s);
+      }
+      if (problemId === 6) {
+        return fn(inputs.s);
+      }
+      if (problemId === 8) {
+        return fn(inputs.s, inputs.p);
+      }
+      
+      throw new Error("Unknown problem ID " + problemId);
+    }
+
+    function getReferenceOutput(problemId, inputs) {
+      if (problemId === 1) {
+        let nums = inputs.nums || [];
+        let target = inputs.target || 0;
+        let seen = {};
+        for (let i = 0; i < nums.length; i++) {
+          let complement = target - nums[i];
+          if (seen.hasOwnProperty(complement)) {
+            return [seen[complement], i];
+          }
+          seen[nums[i]] = i;
+        }
+        return [];
+      }
+      if (problemId === 2) {
+        let l1 = inputs.l1 || [];
+        let l2 = inputs.l2 || [];
+        let carry = 0;
+        let result = [];
+        let i = 0, j = 0;
+        while (i < l1.length || j < l2.length || carry) {
+          let val1 = i < l1.length ? l1[i] : 0;
+          let val2 = j < l2.length ? l2[j] : 0;
+          let total = val1 + val2 + carry;
+          carry = Math.floor(total / 10);
+          result.push(total % 10);
+          i++;
+          j++;
+        }
+        return result;
+      }
+      if (problemId === 3) {
+        let s = inputs.s || "";
+        let charMap = {};
+        let left = 0, maxLen = 0;
+        for (let right = 0; right < s.length; right++) {
+          let char = s[right];
+          if (charMap.hasOwnProperty(char)) {
+            left = Math.max(left, charMap[char] + 1);
+          }
+          charMap[char] = right;
+          maxLen = Math.max(maxLen, right - left + 1);
+        }
+        return maxLen;
+      }
+      if (problemId === 4) {
+        let inputXml = inputs.xml || inputs.xml_string || inputs.xmlString || inputs.xmlContent || "";
+        if (inputXml.includes("<!DOCTYPE") || inputXml.includes("<!ENTITY") || inputXml.includes("SYSTEM")) {
+          return "ParserException: External entities are disabled.";
+        }
+        return inputXml.replace(/<[^>]+>/g, "").trim() || inputXml;
+      }
+      if (problemId === 5) {
+        let uName = inputs.username || "";
+        let pWord = inputs.password || "";
+        let isInjection = uName.includes("'") || uName.toLowerCase().includes("or") || pWord.includes("'");
+        if (isInjection) {
+          return "Authentication failed (Safe prepared statement executed)";
+        }
+        if (uName === "admin" && (pWord === "password123" || pWord === "xyz")) {
+          return "User Logged In: admin";
+        }
+        return "Authentication failed";
+      }
+      if (problemId === 6) {
+        let s = inputs.s || "";
+        if (!s) return "";
+        let start = 0, end = 0;
+        function expandAroundCenter(left, right) {
+          while (left >= 0 && right < s.length && s[left] === s[right]) {
+            left--;
+            right++;
+          }
+          return right - left - 1;
+        }
+        for (let i = 0; i < s.length; i++) {
+          let len1 = expandAroundCenter(i, i);
+          let len2 = expandAroundCenter(i, i + 1);
+          let len = Math.max(len1, len2);
+          if (len > end - start) {
+            start = i - Math.floor((len - 1) / 2);
+            end = i + Math.floor(len / 2);
+          }
+        }
+        return s.slice(start, end + 1);
+      }
+      if (problemId === 7) {
+        let srcVal = inputs.input || inputs.src || inputs.srcString || "";
+        let bufSize = inputs.buffer_size || inputs.destLimit || inputs.destSize || 16;
+        if (srcVal.length >= bufSize) {
+          return "CompileError/ExecutionBlocked: Safe copy bound exceeded.";
+        }
+        return srcVal;
+      }
+      if (problemId === 8) {
+        let s = inputs.s || "";
+        let p = inputs.p || "";
+        let dp = Array(s.length + 1).fill(null).map(() => Array(p.length + 1).fill(false));
+        dp[s.length][p.length] = true;
+        for (let i = s.length; i >= 0; i--) {
+          for (let j = p.length - 1; j >= 0; j--) {
+            let firstMatch = i < s.length && (p[j] === s[i] || p[j] === '.');
+            if (j + 1 < p.length && p[j + 1] === '*') {
+              dp[i][j] = dp[i][j + 2] || (firstMatch && dp[i + 1][j]);
+            } else {
+              dp[i][j] = firstMatch && dp[i + 1][j + 1];
+            }
+          }
+        }
+        return dp[0][0];
+      }
+      return null;
+    }
+
+    const problemTestSuites = {
+      1: [
+        { inputs: { nums: [2, 7, 11, 15], target: 9 }, expected: [0, 1] },
+        { inputs: { nums: [3, 2, 4], target: 6 }, expected: [1, 2] },
+        { inputs: { nums: [3, 3], target: 6 }, expected: [0, 1] }
+      ],
+      2: [
+        { inputs: { l1: [2, 4, 3], l2: [5, 6, 4] }, expected: [7, 0, 8] },
+        { inputs: { l1: [0], l2: [0] }, expected: [0] },
+        { inputs: { l1: [9, 9, 9, 9, 9, 9, 9], l2: [9, 9, 9, 9] }, expected: [8, 9, 9, 9, 0, 0, 0, 1] }
+      ],
+      3: [
+        { inputs: { s: "abcabcbb" }, expected: 3 },
+        { inputs: { s: "bbbbb" }, expected: 1 },
+        { inputs: { s: "pwwkew" }, expected: 3 },
+        { inputs: { s: "" }, expected: 0 }
+      ],
+      4: [
+        { inputs: { xml: "<foo>bar</foo>" }, expected: "bar" },
+        { inputs: { xml: "<!DOCTYPE foo [ <!ENTITY xxe SYSTEM \"file:///etc/passwd\"> ]><foo>&xxe;</foo>" }, expected: "ParserException: External entities are disabled." },
+        { inputs: { xml: "<foo>hello world</foo>" }, expected: "hello world" }
+      ],
+      5: [
+        { inputs: { username: "admin", password: "password123" }, expected: "User Logged In: admin" },
+        { inputs: { username: "admin' OR '1'='1", password: "xyz" }, expected: "Authentication failed (Safe prepared statement executed)" },
+        { inputs: { username: "guest", password: "123" }, expected: "Authentication failed" }
+      ],
+      6: [
+        { inputs: { s: "babad" }, expected: ["bab", "aba"] },
+        { inputs: { s: "cbbd" }, expected: "bb" },
+        { inputs: { s: "a" }, expected: "a" }
+      ],
+      7: [
+        { inputs: { input: "A".repeat(100), buffer_size: 16 }, expected: "CompileError/ExecutionBlocked: Safe copy bound exceeded." },
+        { inputs: { input: "hello", buffer_size: 16 }, expected: "hello" },
+        { inputs: { input: "B".repeat(20), buffer_size: 10 }, expected: "CompileError/ExecutionBlocked: Safe copy bound exceeded." }
+      ],
+      8: [
+        { inputs: { s: "aa", p: "a" }, expected: false },
+        { inputs: { s: "aa", p: "a*" }, expected: true },
+        { inputs: { s: "ab", p: ".*" }, expected: true },
+        { inputs: { s: "aab", p: "c*a*b" }, expected: true }
+      ]
+    };
+
+    window.runWorkspaceCode = function() {
+      // Force expand console
+      const panel = document.getElementById('workspace-console-panel');
+      const arrow = document.getElementById('console-arrow-icon');
+      panel.style.height = '180px';
+      arrow.style.transform = 'rotate(0deg)';
+      isConsoleExpanded = true;
+
+      // Switch to results tab
+      switchConsoleTab('res');
+
+      document.getElementById('console-run-loader').style.display = 'flex';
+      document.getElementById('console-run-output').style.display = 'none';
+
+      setTimeout(() => {
+        document.getElementById('console-run-loader').style.display = 'none';
+        const out = document.getElementById('console-run-output');
+        out.style.display = 'block';
+
+        const tcVal = document.getElementById('console-testcase-input').value;
+        const codeText = document.getElementById('workspace-code-textarea').value;
+        
+        let outputText = "";
+        let expectedText = "";
+        let isCorrect = false;
+        let compilationLog = "[Success] Compilation took 14ms.";
+        let hasError = false;
+        
+        try {
+          const inputs = parseConsoleTestCase(tcVal);
+          let expectedValue = getReferenceOutput(currentProblemId, inputs);
+          expectedText = JSON.stringify(expectedValue);
+
+          let result = executeUserCode(codeText, currentLanguage, currentProblemId, inputs);
+          outputText = JSON.stringify(result);
+          
+          isCorrect = isMatchExpected(result, expectedValue);
+        } catch (err) {
+          hasError = true;
+          outputText = "RuntimeError: " + err.message;
+          compilationLog = "[Error] " + err.message;
+          isCorrect = false;
+        }
+
+        const color = isCorrect ? "#10b981" : "#ef4444";
+
+        out.innerHTML = `
+          <div style="font-weight: 700; color: ${color}; font-size: 13px; margin-bottom: 8px;">
+            ${isCorrect ? "Accepted" : (hasError ? "Runtime Error" : "Wrong Answer / Security Check Failed")}
+          </div>
+          <div class="console-terminal" style="border-color: rgba(255,255,255,0.06);">
+<span style="color: #8c8c8c;">Input case:</span> ${escapeHtml(tcVal)}
+<span style="color: #8c8c8c;">Your Output:</span> <span style="color: ${color}; font-weight: 600;">${escapeHtml(outputText)}</span>
+<span style="color: #8c8c8c;">Expected:</span> ${escapeHtml(expectedText)}
+<span style="color: #8c8c8c;">Compilation Log:</span> <span style="color: ${hasError ? '#ef4444' : '#10b981'};">${escapeHtml(compilationLog)}</span>
+          </div>
+        `;
+      }, 1000);
+    };
+
+    window.submitWorkspaceCode = function() {
+      // Force expand console
+      const panel = document.getElementById('workspace-console-panel');
+      const arrow = document.getElementById('console-arrow-icon');
+      panel.style.height = '180px';
+      arrow.style.transform = 'rotate(0deg)';
+      isConsoleExpanded = true;
+
+      // Switch to results tab
+      switchConsoleTab('res');
+
+      document.getElementById('console-run-loader').style.display = 'flex';
+      document.getElementById('console-run-output').style.display = 'none';
+
+      setTimeout(() => {
+        document.getElementById('console-run-loader').style.display = 'none';
+        const out = document.getElementById('console-run-output');
+        out.style.display = 'block';
+
+        const codeText = document.getElementById('workspace-code-textarea').value;
+        const testSuite = problemTestSuites[currentProblemId];
+        
+        let allPassed = true;
+        let failedIndex = -1;
+        let failedActual = "";
+        let failedExpected = "";
+        let failedInputs = "";
+        let errorOccurred = false;
+        let errorMessage = "";
+        
+        for (let idx = 0; idx < testSuite.length; idx++) {
+          let testCase = testSuite[idx];
+          try {
+            let result = executeUserCode(codeText, currentLanguage, currentProblemId, testCase.inputs);
+            if (!isMatchExpected(result, testCase.expected)) {
+              allPassed = false;
+              failedIndex = idx;
+              failedActual = JSON.stringify(result);
+              failedExpected = JSON.stringify(testCase.expected);
+              failedInputs = JSON.stringify(testCase.inputs);
+              break;
+            }
+          } catch (err) {
+            allPassed = false;
+            failedIndex = idx;
+            errorOccurred = true;
+            errorMessage = err.message;
+            failedInputs = JSON.stringify(testCase.inputs);
+            break;
+          }
+        }
+
+        let status = allPassed ? "Accepted" : (errorOccurred ? "Runtime Error" : "Wrong Answer");
+        let runtime = allPassed ? "15 ms" : "N/A";
+        let memory = allPassed ? "14.8 MB" : "N/A";
+        
+        if (allPassed) {
+          sessionSubmissions.push({
+            problemId: currentProblemId,
+            status: "Accepted",
+            runtime: runtime,
+            memory: memory,
+            language: currentLanguage.toUpperCase(),
+            timestamp: "Just now"
+          });
+
+          const prob = practiceProblems.find(p => p.id === currentProblemId);
+          if (prob && !prob.solved) {
+            prob.solved = true;
+            if (typeof updateStreakOnSolve === 'function') updateStreakOnSolve();
+            if (typeof logRecentActivity === 'function') {
+              logRecentActivity(`Completed Practice problem: <b>"${prob.title}"</b> (${prob.difficulty})`);
+            }
+            renderPracticeProblems();
+            updateDashboardStats();
+          }
+
+          out.innerHTML = `
+            <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); padding: 14px; border-radius: 8px;">
+              <h4 style="margin: 0; color: #10b981; font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 6px; font-family: var(--font-display);">
+                <svg style="width: 18px; height: 18px;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                Success: Accepted!
+              </h4>
+              <p style="margin: 8px 0 0 0; font-size: 12.5px; color: var(--color-gray-300); line-height: 1.5;">
+                All ${testSuite.length} test cases passed successfully. <br>
+                Runtime: <strong>${runtime}</strong> (Beats 96.8% of ${currentLanguage} users) <br>
+                Memory: <strong>${memory}</strong> (Beats 84.1% of ${currentLanguage} users)
+              </p>
+            </div>
+          `;
+        } else {
+          sessionSubmissions.push({
+            problemId: currentProblemId,
+            status: status,
+            runtime: "N/A",
+            memory: "N/A",
+            language: currentLanguage.toUpperCase(),
+            timestamp: "Just now"
+          });
+
+          let errMsg = "";
+          if (errorOccurred) {
+            errMsg = `Failed test case ${failedIndex + 1}/${testSuite.length}: Runtime Error: ${errorMessage}`;
+          } else {
+            const isSecurity = [4, 5, 7].includes(currentProblemId);
+            if (isSecurity) {
+              errMsg = `Failed test case ${failedIndex + 1}/${testSuite.length}: Security Audit check failed. Remediation code must be implemented.`;
+            } else {
+              errMsg = `Failed test case ${failedIndex + 1}/${testSuite.length}: Wrong Answer.\nInput: ${failedInputs}\nOutput: ${failedActual}\nExpected: ${failedExpected}`;
+            }
+          }
+
+          out.innerHTML = `
+            <div style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2); padding: 14px; border-radius: 8px;">
+              <h4 style="margin: 0; color: #ef4444; font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 6px; font-family: var(--font-display);">
+                <svg style="width: 18px; height: 18px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                ${status === "Runtime Error" ? "Runtime Error" : "Validation Failed"}
+              </h4>
+              <p style="margin: 8px 0 0 0; font-size: 12.5px; color: var(--color-gray-300); line-height: 1.5; white-space: pre-wrap;">
+                ${errMsg}
+              </p>
+            </div>
+          `;
+        }
+
+        renderWorkspaceSubmissions();
+      }, 1500);
+    };
+
+    window.sendWorkspaceCodeToAI = function(type) {
+      if (!currentProblemId) return;
+      const prob = practiceProblems.find(p => p.id === currentProblemId);
+      if (!prob) return;
+
+      const codeText = document.getElementById('workspace-code-textarea').value;
+      let promptText = "";
+
+      if (type === 'explain') {
+        promptText = `Can you explain the logic of this code for the practice problem "${prob.title}"?\n\nCode snippet (${currentLanguage.toUpperCase()}):\n\`\`\`${currentLanguage}\n${codeText}\n\`\`\``;
+      } else if (type === 'audit') {
+        promptText = `Please run a static security audit on my code for the practice problem "${prob.title}". Check for vulnerabilities like SQL injection, XXE, buffer overflows, or logical bypasses, and explain how to patch it.\n\nCode snippet:\n\`\`\`${currentLanguage}\n${codeText}\n\`\`\``;
+      } else if (type === 'optimize') {
+        promptText = `Can you optimize the runtime and space complexity of my code for "${prob.title}"? Provide an explanation of performance issues and the corrected code.\n\nCode snippet:\n\`\`\`${currentLanguage}\n${codeText}\n\`\`\``;
+      }
+
+      switchView(null, 'ai-assistant');
+      const chatInput = document.getElementById('ai-chat-input');
+      if (chatInput) {
+        chatInput.value = promptText;
+        // Trigger resize and caret positioning
+        chatInput.dispatchEvent(new Event('input'));
+        
+        // Auto-send chat message
+        const sendBtn = document.getElementById('ai-chat-send-btn');
+        if (sendBtn) {
+          setTimeout(() => sendBtn.click(), 150);
+        }
+      }
+    };
+
+    // Set up search event
+    const practiceSearchInput = document.getElementById('practice-search');
+    if (practiceSearchInput) {
+      practiceSearchInput.addEventListener('input', (e) => {
+        currentSearchQuery = e.target.value;
+        renderPracticeProblems();
+      });
+    }
+
+    // Set up difficulty buttons
+    document.querySelectorAll('#practice-difficulty-filters button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#practice-difficulty-filters button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentDifficultyFilter = btn.getAttribute('data-difficulty');
+        renderPracticeProblems();
+      });
+    });
+
+    // Set up status buttons
+    document.querySelectorAll('#practice-status-filters button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#practice-status-filters button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentStatusFilter = btn.getAttribute('data-status');
+        renderPracticeProblems();
+      });
+    });
+
+    // Initialize the Practice Problems view
+    renderPracticeProblems();
+    updateDashboardStats();
+
+    // Profile Dropdown Toggle Logic
+    const profileTrigger = document.getElementById('profile-trigger');
+    const profileDropdown = document.getElementById('profile-dropdown');
+    
+    if (profileTrigger && profileDropdown) {
+      profileTrigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        profileDropdown.classList.toggle('open');
+      });
+      
+      // Close dropdown when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!profileDropdown.contains(e.target)) {
+          profileDropdown.classList.remove('open');
+        }
+      });
+    }
+
+    // 👤 Profile Controller Logic
+    const AVATAR_SVGS = {
+      1: `<svg aria-label="Avatar 1" fill="none" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%;">
+            <title>Avatar 1</title>
+            <mask height="36" id="av-mask-1" maskUnits="userSpaceOnUse" width="36" x="0" y="0">
+              <rect fill="#FFFFFF" height="36" rx="72" width="36" />
+            </mask>
+            <g mask="url(#av-mask-1)">
+              <rect fill="#ff005b" height="36" width="36" />
+              <rect fill="#ffb238" height="36" rx="6" transform="translate(9 -5) rotate(219 18 18) scale(1)" width="36" x="0" y="0" />
+              <g transform="translate(4.5 -4) rotate(9 18 18)">
+                <path d="M15 19c2 1 4 1 6 0" fill="none" stroke="#000000" stroke-linecap="round" />
+                <rect fill="#000000" height="2" rx="1" stroke="none" width="1.5" x="10" y="14" />
+                <rect fill="#000000" height="2" rx="1" stroke="none" width="1.5" x="24" y="14" />
+              </g>
+            </g>
+          </svg>`,
+      2: `<svg aria-label="Avatar 2" fill="none" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%;">
+            <title>Avatar 2</title>
+            <mask height="36" id="av-mask-2" maskUnits="userSpaceOnUse" width="36" x="0" y="0">
+              <rect fill="#FFFFFF" height="36" rx="72" width="36" />
+            </mask>
+            <g mask="url(#av-mask-2)">
+              <rect fill="#ff7d10" height="36" width="36" />
+              <rect fill="#0a0310" height="36" rx="6" transform="translate(5 -1) rotate(55 18 18) scale(1.1)" width="36" x="0" y="0" />
+              <g transform="translate(7 -6) rotate(-5 18 18)">
+                <path d="M15 20c2 1 4 1 6 0" fill="none" stroke="#FFFFFF" stroke-linecap="round" />
+                <rect fill="#FFFFFF" height="2" rx="1" stroke="none" width="1.5" x="14" y="14" />
+                <rect fill="#FFFFFF" height="2" rx="1" stroke="none" width="1.5" x="20" y="14" />
+              </g>
+            </g>
+          </svg>`,
+      3: `<svg aria-label="Avatar 3" fill="none" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%;">
+            <title>Avatar 3</title>
+            <mask height="36" id="av-mask-3" maskUnits="userSpaceOnUse" width="36" x="0" y="0">
+              <rect fill="#FFFFFF" height="36" rx="72" width="36" />
+            </mask>
+            <g mask="url(#av-mask-3)">
+              <rect fill="#0a0310" height="36" width="36" />
+              <rect fill="#ff005b" height="36" rx="36" transform="translate(-3 7) rotate(227 18 18) scale(1.2)" width="36" x="0" y="0" />
+              <g transform="translate(-3 3.5) rotate(7 18 18)">
+                <path d="M13,21 a1,0.75 0 0,0 10,0" fill="#FFFFFF" />
+                <rect fill="#FFFFFF" height="2" rx="1" stroke="none" width="1.5" x="12" y="14" />
+                <rect fill="#FFFFFF" height="2" rx="1" stroke="none" width="1.5" x="22" y="14" />
+              </g>
+            </g>
+          </svg>`,
+      4: `<svg aria-label="Avatar 4" fill="none" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%;">
+            <title>Avatar 4</title>
+            <mask height="36" id="av-mask-4" maskUnits="userSpaceOnUse" width="36" x="0" y="0">
+              <rect fill="#FFFFFF" height="36" rx="72" width="36" />
+            </mask>
+            <g mask="url(#av-mask-4)">
+              <rect fill="#d8fcb3" height="36" width="36" />
+              <rect fill="#89fcb3" height="36" rx="6" transform="translate(9 -5) rotate(219 18 18) scale(1)" width="36" x="0" y="0" />
+              <g transform="translate(4.5 -4) rotate(9 18 18)">
+                <path d="M15 19c2 1 4 1 6 0" fill="none" stroke="#000000" stroke-linecap="round" />
+                <rect fill="#000000" height="2" rx="1" stroke="none" width="1.5" x="10" y="14" />
+                <rect fill="#000000" height="2" rx="1" stroke="none" width="1.5" x="24" y="14" />
+              </g>
+            </g>
+          </svg>`
+    };
+
+
+
+    let tempSelectedAvatarId = 1;
+    window.selectAvatarId = function(id) {
+      tempSelectedAvatarId = id;
+      document.querySelectorAll('#avatar-picker-strip .avatar-select-btn').forEach(btn => {
+        const btnId = parseInt(btn.getAttribute('data-avatar-id'));
+        btn.classList.toggle('active', btnId === id);
+      });
+    };
+
+    function hexToRgb(hex) {
+      if (!hex) return "255, 255, 255";
+      hex = hex.replace('#', '');
+      if (hex.length === 3) {
+        hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+      }
+      const r = parseInt(hex.substring(0, 2), 16);
+      const g = parseInt(hex.substring(2, 4), 16);
+      const b = parseInt(hex.substring(4, 6), 16);
+      return isNaN(r) || isNaN(g) || isNaN(b) ? "255, 255, 255" : `${r}, ${g}, ${b}`;
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function updateBadgesUI() {
+      const container = document.getElementById('badges-container');
+      if (!container) return;
+
+      const isSolved = (id) => {
+        const prob = practiceProblems.find(p => p.id === id);
+        return prob ? prob.solved : false;
+      };
+
+      const solvedCount = practiceProblems.filter(p => p.solved).length;
+
+      const badges = [
+        {
+          id: "vericode-rising",
+          title: "Vericode Rising",
+          desc: "Complete at least 1 secure coding challenge.",
+          unlocked: solvedCount >= 1,
+          icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 28px; height: 28px;"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`,
+          color: "3b82f6"
+        },
+        {
+          id: "owasp-master",
+          title: "OWASP Master",
+          desc: "Solve both the SQL Injection and XXE Parser challenges.",
+          unlocked: isSolved(4) && isSolved(5),
+          icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 28px; height: 28px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`,
+          color: "ffd700"
+        },
+        {
+          id: "cpp-expert",
+          title: "C++ Expert",
+          desc: "Solve the Buffer Overflow Check challenge.",
+          unlocked: isSolved(7),
+          icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 28px; height: 28px;"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg>`,
+          color: "10b981"
+        },
+        {
+          id: "crypto-wizard",
+          title: "Crypto Wizard",
+          desc: "Solve the Regular Expression Matching challenge.",
+          unlocked: isSolved(8),
+          icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 28px; height: 28px;"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`,
+          color: "8b5cf6"
+        }
+      ];
+
+      container.innerHTML = badges.map(badge => {
+        const border = badge.unlocked ? `border: 1.5px solid rgba(${hexToRgb(badge.color)}, 0.35); box-shadow: 0 4px 20px rgba(${hexToRgb(badge.color)}, 0.15); background: linear-gradient(145deg, rgba(${hexToRgb(badge.color)}, 0.05) 0%, rgba(0,0,0,0.2) 100%);` : 'border: 1.5px solid rgba(255, 255, 255, 0.03); background: rgba(255, 255, 255, 0.01); opacity: 0.4; filter: grayscale(1);';
+        const iconBg = badge.unlocked ? `background: rgba(${hexToRgb(badge.color)}, 0.12); color: #${badge.color};` : 'background: rgba(255,255,255,0.03); color: var(--color-gray-600);';
+        const statusText = badge.unlocked ? `<span style="font-size: 11px; font-weight: 700; color: #${badge.color}; text-transform: uppercase; letter-spacing: 0.05em; display: inline-flex; align-items: center; gap: 4px;">✓ Unlocked</span>` : `<span style="font-size: 11px; font-weight: 600; color: var(--color-gray-500); text-transform: uppercase; letter-spacing: 0.05em; display: inline-flex; align-items: center; gap: 4px;">🔒 Locked</span>`;
+
+        return `
+          <div class="dash-card" style="display: flex; flex-direction: column; justify-content: space-between; gap: 14px; padding: 20px; border-radius: 12px; transition: all 0.3s ease; ${border}">
+            <div style="display: flex; align-items: flex-start; gap: 14px;">
+              <div style="padding: 10px; border-radius: 10px; display: flex; align-items: center; justify-content: center; ${iconBg}">
+                ${badge.icon}
+              </div>
+              <div style="flex: 1;">
+                <h4 style="margin: 0 0 4px 0; font-size: 16px; font-weight: 600; color: ${badge.unlocked ? 'var(--color-white)' : 'var(--color-gray-400)'};">${badge.title}</h4>
+                <p style="margin: 0; font-size: 12px; line-height: 1.5; color: var(--color-gray-500);">${badge.desc}</p>
+              </div>
+            </div>
+            <div style="display: flex; justify-content: flex-end; align-items: center; margin-top: 6px;">
+              ${statusText}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function updateProfileUI() {
+      try {
+        // Update avatar displays
+        const avatarId = userProfileData.avatarId || 1;
+        const triggerAvatar = document.getElementById('profile-trigger-avatar-inner');
+        if (triggerAvatar) {
+          triggerAvatar.innerHTML = AVATAR_SVGS[avatarId];
+        }
+        const mobileTriggerAvatar = document.getElementById('mobile-topbar-avatar');
+        if (mobileTriggerAvatar) {
+          mobileTriggerAvatar.innerHTML = AVATAR_SVGS[avatarId];
+        }
+        const settingsAvatarCircle = document.getElementById('settings-avatar-circle');
+        if (settingsAvatarCircle) {
+          settingsAvatarCircle.innerHTML = AVATAR_SVGS[avatarId] || "U";
+        }
+
+        // Badges
+        updateBadgesUI();
+
+        // Leaderboard Sync
+        if (typeof renderLeaderboard === 'function') {
+          renderLeaderboard();
+        }
+
+        // Sync name with Topbar and Trigger
+        const triggerNameEl = document.querySelector('.profile-trigger-name');
+        if (triggerNameEl) {
+          triggerNameEl.innerText = userProfileData.displayName || "ganeshabbu";
+        }
+        
+        const triggerEmailEl = document.querySelector('.profile-trigger-email');
+        if (triggerEmailEl && userProfileData.github) {
+          if (userProfileData.github.includes('github.com/')) {
+            const username = userProfileData.github.split('github.com/')[1];
+            if (username) triggerEmailEl.innerText = `@${username}`;
+          }
+        } else if (triggerEmailEl) {
+          triggerEmailEl.innerText = userProfileData.contactEmail || "user@vericode.ai";
+        }
+      } catch (err) {
+        console.error("updateProfileUI error:", err);
+      }
+    }
+
+    window.changeUserPassword = function() {
+      const currentInput = document.getElementById('input-current-password');
+      const newInput = document.getElementById('input-new-password');
+      const confirmInput = document.getElementById('input-confirm-password');
+      const feedback = document.getElementById('password-change-feedback');
+
+      if (!currentInput || !newInput || !confirmInput || !feedback) return;
+
+      const currentVal = currentInput.value;
+      const newVal = newInput.value;
+      const confirmVal = confirmInput.value;
+
+      // Get stored password (default password123)
+      const storedVal = localStorage.getItem('vericode_password') || 'password123';
+
+      feedback.style.display = 'block';
+      feedback.style.padding = '8px 12px';
+      feedback.style.marginTop = '10px';
+
+      if (currentVal !== storedVal) {
+        feedback.style.backgroundColor = 'rgba(239, 68, 68, 0.15)';
+        feedback.style.color = '#ef4444';
+        feedback.style.border = '1px solid rgba(239, 68, 68, 0.3)';
+        feedback.innerText = 'Error: The current password you entered is incorrect.';
+        return;
+      }
+
+      if (newVal.length < 6) {
+        feedback.style.backgroundColor = 'rgba(239, 68, 68, 0.15)';
+        feedback.style.color = '#ef4444';
+        feedback.style.border = '1px solid rgba(239, 68, 68, 0.3)';
+        feedback.innerText = 'Error: The new password must be at least 6 characters long.';
+        return;
+      }
+
+      if (newVal !== confirmVal) {
+        feedback.style.backgroundColor = 'rgba(239, 68, 68, 0.15)';
+        feedback.style.color = '#ef4444';
+        feedback.style.border = '1px solid rgba(239, 68, 68, 0.3)';
+        feedback.innerText = 'Error: The new password and confirmation password do not match.';
+        return;
+      }
+
+      // Success
+      localStorage.setItem('vericode_password', newVal);
+      feedback.style.backgroundColor = 'rgba(16, 185, 129, 0.15)';
+      feedback.style.color = '#10b981';
+      feedback.style.border = '1px solid rgba(16, 185, 129, 0.3)';
+      feedback.innerText = 'Success: Your password has been successfully updated.';
+      
+      // Clear inputs
+      currentInput.value = '';
+      newInput.value = '';
+      confirmInput.value = '';
+    };
+
+    // Initialize profile rendering
+    updateProfileUI();
+    isProfileLoaded = true;
+
+    // Setup leaderboard search listener
+    const searchInput = document.getElementById('leaderboard-search');
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        leaderboardSearchQuery = e.target.value;
+        renderLeaderboard();
+      });
+    }
+
+    // Setup Fix My Itch search listener
+    const itchSearchInput = document.getElementById('itch-search');
+    if (itchSearchInput) {
+      itchSearchInput.addEventListener('input', (e) => {
+        itchSearchQuery = e.target.value;
+        renderItches();
+      });
+    }
+
+    window.toggleMobileSidebar = function() {
+      const sidebar = document.querySelector('.dash-sidebar');
+      const overlay = document.querySelector('.dash-sidebar-overlay');
+      if (sidebar) {
+        sidebar.classList.toggle('mobile-open');
+      }
+      if (overlay) {
+        overlay.classList.toggle('active');
+      }
+    };
+
+    const programmingCourses = {
+      python: {
+        title: "Python Programming Course",
+        subtitle: "From Basic Syntax to Advanced Functional Concepts",
+        topics: [
+          {
+            title: "Variables, Lists, and Dicts",
+            level: "Basic",
+            description: "Understand the core data structures in Python, including dynamic typing, lists (arrays), and dictionaries (hash maps). Learn how variables act as pointers to values in memory.",
+            analogy: "Think of Python variables as sticky note tags. When you write <code>x = 5</code>, you write the tag 'x' and stick it onto the value <code>5</code>. Lists are like a numbered organizer tray where each slot contains an item, and dictionaries are like mailboxes labeled with names (keys) holding letters (values).",
+            code: `# Python Core Data Structures Example
+
+# Dynamic variable binding
+user_name = "Alice"
+user_score = 95
+
+# Lists (Dynamic Arrays)
+fruits = ["apple", "banana", "cherry"]
+fruits.append("date") # Adds an item to the end
+
+# Dictionaries (Hash Maps)
+user_profiles = {
+    "ganeshabbu": {
+        "tier": "Knight",
+        "score": 1420
+    },
+    "privacy_hawk": {
+        "tier": "Guardian",
+        "score": 1980
+    }
+}
+
+# Accessing values
+print(fruits[0]) # Output: apple
+print(user_profiles["ganeshabbu"]["tier"]) # Output: Knight`
+          },
+          {
+            title: "Functions, Scope, and Flow Control",
+            level: "Intermediate",
+            description: "Learn to build modular code using functions, manage local/global variable scopes, and steer program execution using conditional structures and loops.",
+            analogy: "A function is like a kitchen blender. You give it inputs (ingredients), it runs a set recipe (instructions), and outputs a smoothie (return value). Scope is like privacy settings on a phone: variables inside a function are private (local), while variables on your home feed are public (global) to the whole app.",
+            code: `# Python Control Flow and Functions Example
+
+global_setting = "strict"
+
+def calculate_grade(score, extra_credit=0):
+    # 'local_score' is scoped inside this function only
+    local_score = score + extra_credit
+    
+    if local_score >= 90:
+        return "A"
+    elif local_score >= 80:
+        return "B"
+    else:
+        return "C"
+
+# Loop iteration over collection
+scores = [85, 92, 78]
+for idx, s in enumerate(scores):
+    grade = calculate_grade(s, extra_credit=2)
+    print(f"Student {idx}: Score {s} -> Grade {grade}")`
+          },
+          {
+            title: "Decorators and Generator Yields",
+            level: "Advanced",
+            description: "Master Python's advanced metaprogramming elements: decorators (to intercept/modify function calls) and generators (for lazy evaluation and memory-efficient iterations).",
+            analogy: "A decorator is like a security guard standing at a building entrance. Instead of modifying the building itself, the guard checks IDs (wraps function execution) before letting anyone in. A generator is like a vending machine: instead of pre-packaging and loading 1,000 soda cans in memory, it yields one soda at a time on demand.",
+            code: `# Python Metaprogramming & Generators Example
+
+import time
+
+# 1. Custom Decorator (Logger)
+def log_execution_time(func):
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        end = time.time()
+        print(f"[LOG] {func.__name__} executed in {end - start:.5f}s")
+        return result
+    return wrapper
+
+@log_execution_time
+def compute_heavy_sum(limit):
+    return sum(x for x in range(limit))
+
+# 2. Generator (Memory-efficient sequence generator)
+def secure_token_generator(count):
+    token = 1234
+    for i in range(count):
+        # yields value and pauses execution state
+        token = (token * 31) % 9999
+        yield f"TKN-{token}"
+
+# Execute
+sum_result = compute_heavy_sum(1000000)
+
+print("Fetching generated tokens lazily:")
+for tkn in secure_token_generator(3):
+    print(tkn)`
+          }
+        ]
+      },
+      javascript: {
+        title: "JavaScript Programming Course",
+        subtitle: "From Scopes and Closures to Modern Asynchronous Execution",
+        topics: [
+          {
+            title: "Let, Const, and Closures",
+            level: "Basic",
+            description: "Understand block scoping with let/const, and master closures—the mechanism by which an inner function retains access to its enclosing scope variables even after the outer function has returned.",
+            analogy: "Closures are like a bubble that surrounds a function when it is born. The function carries this bubble (its lexical scope environment) wherever it travels. Even if the outer function is long dead, the inner function can reach into the bubble and grab variables.",
+            code: `// JavaScript Let, Const, and Closures Example
+
+const appName = "Vericode AI"; // Global constant
+
+function createCounter(userId) {
+  // 'count' variable is enclosed inside the returned function's bubble
+  let count = 0;
+  
+  return function() {
+    count++;
+    return {
+      userId: userId,
+      actionsCount: count,
+      timestamp: new Date().toLocaleTimeString()
+    };
+  };
+}
+
+// Instantiate counters
+const user1Counter = createCounter("ganeshabbu");
+const user2Counter = createCounter("privacy_hawk");
+
+console.log(user1Counter()); // { userId: 'ganeshabbu', actionsCount: 1, ... }
+console.log(user1Counter()); // { userId: 'ganeshabbu', actionsCount: 2, ... }
+console.log(user2Counter()); // { userId: 'privacy_hawk', actionsCount: 1, ... }`
+          },
+          {
+            title: "Asynchronous Execution, Promises & Async/Await",
+            level: "Intermediate",
+            description: "Understand the non-blocking JavaScript Event Loop, asynchronous Promise states (Pending, Resolved, Rejected), and modern async/await syntax to write clean asynchronous code.",
+            analogy: "Promises are like ordering food at a counter. You pay and receive a pager (the Promise). While the kitchen cooks (background async task), you don't stand frozen; you can text friends or read a magazine (non-blocking). When the pager rings, you exchange it for food (the Promise resolves).",
+            code: `// JavaScript Asynchronous Operations Example
+
+// Mock API Call returning a Promise
+function fetchChallengeMetadata(challengeId) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (challengeId > 0) {
+        resolve({ id: challengeId, title: "SQL Injection Probe", difficulty: "Medium" });
+      } else {
+        reject(new Error("Invalid Challenge ID"));
+      }
+    }, 1000); // 1-second network latency simulation
+  });
+}
+
+// Async/Await syntax wrapper
+async function loadPracticeWorkspace() {
+  console.log("Loading practice workspace resources...");
+  try {
+    const meta = await fetchChallengeMetadata(5);
+    console.log("Challenge successfully loaded:", meta);
+  } catch (error) {
+    console.error("Workspace load failed:", error.message);
+  }
+}
+
+loadPracticeWorkspace();`
+          },
+          {
+            title: "Prototypes, Classes, and Modules",
+            level: "Advanced",
+            description: "Master prototype chaining and inheritance in JS, syntactic sugar ES6 Classes, and encapsulation using modern ES Modules (import/export structures).",
+            analogy: "Prototypes are like genetic templates. If an object is asked for a property it doesn't possess, it asks its parent prototype (its 'DNA'), repeating the chain until it finds the property. ES Modules are like building specialized microchips in separate sterile rooms and snapping them together in the main motherboard.",
+            code: `// JavaScript Prototypes & Modules Example
+
+// Base Prototype object definition
+const baseSecAudit = {
+  category: "Generic Security Audit",
+  logAudit() {
+    console.log(\`[\${this.category}] Initiating code verification on file: \${this.fileName}\`);
+  }
+};
+
+// Create derived object linking prototype chain
+const nodeAudit = Object.create(baseSecAudit);
+nodeAudit.category = "Node.js Env Audit";
+nodeAudit.fileName = "server.js";
+nodeAudit.logAudit(); // Output: [Node.js Env Audit] Initiating code verification on file: server.js
+
+// ES6 Class syntax wrapper
+class AuditRunner {
+  constructor(moduleName) {
+    this.moduleName = moduleName;
+  }
+  
+  runAudit() {
+    console.log(\`Executing vulnerability scan on module: \${this.moduleName}\`);
+  }
+}
+
+// Exporting class (ES Modules syntax)
+// export default AuditRunner;
+const runner = new AuditRunner("AuthModule");
+runner.runAudit();`
+          }
+        ]
+      },
+      cpp: {
+        title: "C++ Programming Course",
+        subtitle: "From Memory Management to Metaprogramming and RAII",
+        topics: [
+          {
+            title: "Pointers, References, and Memory Management",
+            level: "Basic",
+            description: "Understand raw pointer addresses, references, stack vs. heap allocation, and the critical responsibility of managing memory manually using new and delete.",
+            analogy: "A pointer is like writing a house address on a card. The card is small and cheap to pass around (pointer), but it points to a large physical structure (memory space). If you demolish the house but keep the address card, you get a 'Dangling Pointer'—a major security vulnerability!",
+            code: `// C++ Pointers and Stack/Heap Memory Example
+#include <iostream>
+#include <string>
+
+int main() {
+    // 1. Stack Allocation (Automatic cleanup)
+    int stackVal = 42;
+    int& ref = stackVal; // Reference alias
+
+    // 2. Heap Allocation (Manual management)
+    int* ptr = new int(100); // Allocating heap space
+    
+    std::cout << "Pointer Address: " << ptr << std::endl;
+    std::cout << "Pointer Dereferenced Value: " << *ptr << std::endl;
+    
+    // Critical: Clean up dynamic memory to avoid leaks
+    delete ptr;
+    ptr = nullptr; // Clear pointer address
+    
+    return 0;
+}`
+          },
+          {
+            title: "Classes, Encapsulation, and RAII Pattern",
+            level: "Intermediate",
+            description: "Master Object-Oriented C++, encapsulation boundaries, object scopes, constructors, destructors, and the Resource Acquisition Is Initialization (RAII) pattern.",
+            analogy: "RAII is like buying a ticket at a theme park that automatically includes locker rental. The locker is rented when you enter the ride (Resource acquired in Constructor) and is automatically emptied and returned when you walk out the exit (Resource released in Destructor), ensuring you never leave locker keys behind.",
+            code: `// C++ RAII Object Lifecycle Example
+#include <iostream>
+#include <fstream>
+#include <string>
+
+class FileLogManager {
+private:
+    std::ofstream fileStream;
+
+public:
+    // Constructor (Resource Acquisition)
+    FileLogManager(const std::string& filepath) {
+        fileStream.open(filepath);
+        if (fileStream.is_open()) {
+            std::cout << "[RAII] Log File Open." << std::endl;
+        }
+    }
+
+    void logMessage(const std::string& msg) {
+        if (fileStream.is_open()) {
+            fileStream << "[INFO] " << msg << "\\n";
+        }
+    }
+
+    // Destructor (Resource Release - Automated on out-of-scope)
+    ~FileLogManager() {
+        if (fileStream.is_open()) {
+            fileStream.close();
+            std::cout << "[RAII] Log File Closed Automatically." << std::endl;
+        }
+    }
+};
+
+void runLoggerScope() {
+    FileLogManager logger("audit_log.txt");
+    logger.logMessage("User auth transaction completed.");
+    // 'logger' object goes out of scope here; destructor executes automatically
+}`
+          },
+          {
+            title: "Template Metaprogramming & Smart Pointers",
+            level: "Advanced",
+            description: "Learn generic templates evaluated at compile-time, and modern C++ smart pointers (std::unique_ptr, std::shared_ptr) to automate memory safety boundaries.",
+            analogy: "Templates are like universal molds in a manufacturing plant: you build the blueprint once, and the plant prints the mold in plastic, steel, or aluminum depending on the order. Smart pointers are like smart hotel rooms that detect when all guests have checked out and automatically run a garbage disposal cycle.",
+            code: `// C++ Smart Pointers and Generic Templates Example
+#include <iostream>
+#include <memory>
+
+// 1. Template Metaprogramming function
+template <typename T>
+T getMaximumValue(T a, T b) {
+    return (a > b) ? a : b;
+}
+
+class UserSession {
+public:
+    UserSession() { std::cout << "Session Created." << std::endl; }
+    ~UserSession() { std::cout << "Session Destroyed Safely." << std::endl; }
+    void ping() { std::cout << "Session Keep-Alive Received." << std::endl; }
+};
+
+int main() {
+    // Compile-time generic evaluation
+    std::cout << "Max Int: " << getMaximumValue<int>(10, 20) << std::endl;
+    std::cout << "Max Double: " << getMaximumValue<double>(5.5, 3.2) << std::endl;
+
+    // 2. Modern Smart Pointer (std::unique_ptr)
+    {
+        std::unique_ptr<UserSession> session = std::make_unique<UserSession>();
+        session->ping();
+        // Session goes out of scope here; memory released automatically, no dangling pointer
+    }
+    
+    return 0;
+}`
+          }
+        ]
+      },
+      java: {
+        title: "Java Programming Course",
+        subtitle: "From Object-Oriented Foundation to Multithreading & Reflection",
+        topics: [
+          {
+            title: "Object-Oriented Programming (OOP) Principles",
+            level: "Basic",
+            description: "Master Java's OOP pillars: Encapsulation (data hiding), Inheritance (reusable structures), Polymorphism (dynamic behavior binding), and Interfaces.",
+            analogy: "OOP is like driving a modern sedan. The complex mechanical transmission is hidden under the hood (Encapsulation). The sedan inherits properties from the basic chassis blueprint (Inheritance). The gas pedal accelerates whether you are driving a gasoline sedan or an electric sedan (Polymorphism).",
+            code: `// Java Object-Oriented Principles Example
+
+// Interface defining contract
+interface VulnerabilityScanner {
+    void scanCode(String code);
+}
+
+// Base abstract class
+abstract class SecurityTool {
+    protected String toolName;
+    
+    public SecurityTool(String name) {
+        this.toolName = name;
+    }
+}
+
+// Derived class implementing interface
+class StaticScanner extends SecurityTool implements VulnerabilityScanner {
+    public StaticScanner(String name) {
+        super(name);
+    }
+    
+    @Override
+    public void scanCode(String code) {
+        System.out.println("[" + toolName + "] Checking code segment for SQL Injection patterns...");
+    }
+}
+
+public class OOPMain {
+    public static void main(String[] args) {
+        VulnerabilityScanner scanner = new StaticScanner("SonarLite");
+        scanner.scanCode("SELECT * FROM users WHERE id = " + args[0]);
+    }
+}`
+          },
+          {
+            title: "Threads, Concurrency & Synchronization",
+            level: "Intermediate",
+            description: "Learn Java's thread model, subclassing Thread vs implementing Runnable, concurrent execution, race conditions, and synchronization locks.",
+            analogy: "A shared resource (like a printer in an office) can only process one job at a time. If two workers click print at the exact same millisecond without synchronization (a race condition), the print sheets get scrambled. A synchronized block acts like a lock on the printer room door: only the worker with the key can enter, while others wait in line.",
+            code: `// Java Multithreading and Synchronization Example
+
+class BankAccount {
+    private int balance = 1000;
+    
+    // Synchronized method locks access to one thread at a time
+    public synchronized void withdraw(int amount, String threadName) {
+        if (balance >= amount) {
+            System.out.println(threadName + " is preparing to withdraw...");
+            try { Thread.sleep(100); } catch (InterruptedException e) {}
+            balance -= amount;
+            System.out.println(threadName + " completed withdrawal. Balance: " + balance);
+        } else {
+            System.out.println("Insufficient funds for " + threadName);
+        }
+    }
+}
+
+public class ThreadMain {
+    public static void main(String[] args) {
+        BankAccount account = new BankAccount();
+        
+        Runnable task = () -> {
+            account.withdraw(600, Thread.currentThread().getName());
+        };
+        
+        // Spin up two threads accessing the same account concurrently
+        Thread t1 = new Thread(task, "ATM-1");
+        Thread t2 = new Thread(task, "Mobile-App");
+        
+        t1.start();
+        t2.start();
+    }
+}`
+          },
+          {
+            title: "Generics, Reflection API & Garbage Collection",
+            level: "Advanced",
+            description: "Master Java Type Safety with Generics, dynamically inspect classes/methods at runtime using the Reflection API, and understand Automatic Garbage Collection sweeps.",
+            analogy: "Generics are like airport check-in labels: a suitcase labeled 'FRAGILE' only accepts delicate items, ensuring safety. Reflection is like an X-ray scanner: it looks inside a sealed case, reads labels, and invokes actions without unlocking it. Garbage Collection is like a city cleaning crew that drives around neighborhoods picking up garbage bags left on curbs (out-of-scope objects).",
+            code: `// Java Generics & Reflection Example
+import java.lang.reflect.Method;
+
+// Generic Class
+class SecureEnvelope<T> {
+    private T payload;
+    
+    public SecureEnvelope(T data) {
+        this.payload = data;
+    }
+    
+    public T getPayload() { return payload; }
+}
+
+public class AdvancedMain {
+    public static void main(String[] args) throws Exception {
+        // Generics type validation
+        SecureEnvelope<String> msgEnvelope = new SecureEnvelope<>("Encrypted Data Payload");
+        System.out.println("Envelope content: " + msgEnvelope.getPayload());
+
+        // Reflection API querying class contents at runtime
+        Class<?> clazz = msgEnvelope.getClass();
+        System.out.println("Reflecting Class Name: " + clazz.getName());
+        
+        Method[] methods = clazz.getDeclaredMethods();
+        for (Method m : methods) {
+            System.out.println("Discovered Method: " + m.getName() + " -> Returns " + m.getReturnType());
+        }
+    }
+}`
+          }
+        ]
+      }
+    };
+
+    let activeLanguageCourse = null;
+    let activeCourseTopicIndex = 0;
+
+    window.openLanguageCourse = function(lang) {
+      const course = programmingCourses[lang];
+      if (!course) return;
+
+      activeLanguageCourse = lang;
+      activeCourseTopicIndex = 0;
+
+      // Update titles
+      document.getElementById('course-viewer-title').innerText = course.title;
+      document.getElementById('course-viewer-subtitle').innerText = course.subtitle;
+
+      // Render syllabus nodes
+      const nodesContainer = document.getElementById('course-syllabus-nodes');
+      nodesContainer.innerHTML = '';
+
+      course.topics.forEach((topic, idx) => {
+        const btn = document.createElement('button');
+        btn.className = `chat-channel-btn${idx === activeCourseTopicIndex ? ' active' : ''}`;
+        btn.style.width = '100%';
+        btn.style.textAlign = 'left';
+        btn.style.padding = '10px 12px';
+        btn.style.borderRadius = '6px';
+        btn.style.display = 'flex';
+        btn.style.flexDirection = 'column';
+        btn.style.gap = '4px';
+        
+        const badgeColor = topic.level === 'Basic' ? '#10b981' : (topic.level === 'Intermediate' ? '#f59e0b' : '#ef4444');
+        
+        btn.innerHTML = `
+          <span style="font-weight: 600; font-size: 13px; color: var(--color-white);">${topic.title}</span>
+          <span style="font-size: 10px; color: ${badgeColor}; font-weight: 700; text-transform: uppercase;">${topic.level}</span>
+        `;
+        
+        btn.addEventListener('click', () => {
+          selectCourseTopic(lang, idx);
+        });
+
+        nodesContainer.appendChild(btn);
+      });
+
+      // Render first topic content
+      renderCourseTopicContent(course.topics[0], 0, course.topics.length);
+
+      // Transition Panels
+      document.getElementById('learning-catalog').style.display = 'none';
+      const viewer = document.getElementById('learning-course-viewer');
+      viewer.style.display = 'flex';
+      
+      // Update progress bar
+      updateCourseProgress(0, course.topics.length);
+      if (typeof saveLearningProgress === 'function') saveLearningProgress(lang, 0, course.topics.length);
+    };
+
+    window.backToLearningCatalog = function() {
+      const viewer = document.getElementById('learning-course-viewer');
+      if (viewer) viewer.style.display = 'none';
+      const catalog = document.getElementById('learning-catalog');
+      if (catalog) catalog.style.display = 'flex';
+      activeLanguageCourse = null;
+    };
+
+    function selectCourseTopic(lang, index) {
+      activeCourseTopicIndex = index;
+      const course = programmingCourses[lang];
+      if (!course) return;
+
+      // Update active syllabus button highlight
+      const buttons = document.getElementById('course-syllabus-nodes').children;
+      for (let i = 0; i < buttons.length; i++) {
+        buttons[i].classList.toggle('active', i === index);
+      }
+
+      // Render selected topic
+      renderCourseTopicContent(course.topics[index], index, course.topics.length);
+      
+      // Update progress bar
+      updateCourseProgress(index, course.topics.length);
+      if (typeof saveLearningProgress === 'function') saveLearningProgress(lang, index, course.topics.length);
+    }
+
+    function updateCourseProgress(index, total) {
+      const progress = ((index + 1) / total) * 100;
+      const progressFill = document.getElementById('course-viewer-progress-fill');
+      if (progressFill) progressFill.style.width = `${progress}%`;
+    }
+
+    function renderCourseTopicContent(topic, index, total) {
+      const pane = document.getElementById('lesson-content-pane');
+      if (!pane) return;
+
+      const badgeColor = topic.level === 'Basic' ? '#10b981' : (topic.level === 'Intermediate' ? '#f59e0b' : '#ef4444');
+
+      pane.innerHTML = `
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+          <span class="lang-badge" style="border-color: rgba(${hexToRgb(badgeColor.substring(1))}, 0.2); color: ${badgeColor}; font-size: 11px; font-weight: 700; text-transform: uppercase;">
+            ${topic.level} Topic
+          </span>
+          <span style="font-size: 12px; color: var(--color-gray-500);">Lesson ${index + 1} of ${total}</span>
+        </div>
+
+        <h3 style="font-size: 24px; color: var(--color-white); margin-bottom: 12px; font-family: var(--font-display);">${topic.title}</h3>
+        <p style="font-size: 14px; line-height: 1.6; color: var(--color-gray-300); margin-bottom: 24px;">${topic.description}</p>
+        
+        <!-- Analogy Callout (Premium visual style) -->
+        <div style="background: rgba(124, 58, 237, 0.05); border-left: 4px solid #7c3aed; border-radius: 4px; padding: 16px; margin-bottom: 24px;">
+          <h4 style="font-size: 13px; color: #a78bfa; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">💡 Real-Life Analogy</h4>
+          <p style="font-size: 13.5px; line-height: 1.6; color: var(--color-gray-200); margin: 0;">${topic.analogy}</p>
+        </div>
+
+        <h4 style="font-size: 14px; color: var(--color-white); margin-bottom: 8px; font-weight: 600;">🖥️ Example Program</h4>
+        
+        <!-- Code block container -->
+        <div style="background: #0d0d0d; border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 16px; position: relative;">
+          <button class="opt-btn" onclick="copyCourseCode(this)" style="position: absolute; top: 12px; right: 12px; padding: 4px 8px; font-size: 10px; font-weight: 600; cursor: pointer;">
+            Copy
+          </button>
+          <pre style="margin: 0; overflow-x: auto; font-family: monospace; font-size: 13px; line-height: 1.6; color: #e0e0e0;"><code id="course-code-block">${escapeHtml(topic.code)}</code></pre>
+        </div>
+      `;
+    }
+
+    window.copyCourseCode = function(btn) {
+      const code = document.getElementById('course-code-block').innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        const originalText = btn.innerText;
+        btn.innerText = "Copied!";
+        btn.style.background = "#55ff55";
+        btn.style.color = "#000000";
+        setTimeout(() => {
+          btn.innerText = originalText;
+          btn.style.background = "";
+          btn.style.color = "";
+        }, 1500);
+      });
+    };
+
+    window.switchSettingsTab = function(btn, tabId) {
+      const buttons = btn.parentElement.querySelectorAll('.settings-nav-btn');
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const container = document.getElementById('settings-panes-container');
+      if (container) {
+        container.querySelectorAll('.settings-tab-pane').forEach(pane => {
+          pane.style.display = 'none';
+        });
+        const activePane = document.getElementById('settings-pane-' + tabId);
+        if (activePane) {
+          activePane.style.display = 'block';
+        }
+      }
+    };
+
+    window.loadSettingsUI = function() {
+      try {
+        let firstName = "";
+        let lastName = "";
+        if (userProfileData.displayName) {
+          const parts = userProfileData.displayName.split(' ');
+          firstName = parts[0] || "";
+          lastName = parts.slice(1).join(' ') || "";
+        }
+        
+        const fnInput = document.getElementById('settings-first-name');
+        const lnInput = document.getElementById('settings-last-name');
+        if (fnInput) fnInput.value = firstName;
+        if (lnInput) lnInput.value = lastName;
+        
+        const usernameInput = document.getElementById('settings-username');
+        if (usernameInput) usernameInput.value = userProfileData.displayName || "";
+        
+        const emailInput = document.getElementById('settings-email');
+        if (emailInput) emailInput.value = userProfileData.contactEmail || "";
+        
+        const phoneInput = document.getElementById('settings-phone');
+        if (phoneInput) phoneInput.value = userProfileData.contactPhone || "";
+        
+        const bioInput = document.getElementById('settings-bio');
+        if (bioInput) bioInput.value = userProfileData.bio || "";
+        
+        // Populate new fields
+        const genderInput = document.getElementById('settings-gender');
+        if (genderInput) genderInput.value = userProfileData.gender || "";
+        
+        const locationInput = document.getElementById('settings-location');
+        if (locationInput) locationInput.value = userProfileData.location || "";
+        
+        const birthdayInput = document.getElementById('settings-birthday');
+        if (birthdayInput) birthdayInput.value = userProfileData.birthday || "";
+        
+        const educationInput = document.getElementById('settings-education');
+        if (educationInput) educationInput.value = userProfileData.education || "";
+        
+        const skillsInput = document.getElementById('settings-skills');
+        if (skillsInput) skillsInput.value = userProfileData.skills || "";
+        
+        const githubInput = document.getElementById('settings-github');
+        if (githubInput) githubInput.value = userProfileData.github || "";
+        
+        const linkedinInput = document.getElementById('settings-linkedin');
+        if (linkedinInput) linkedinInput.value = userProfileData.linkedin || "";
+        
+        const xInput = document.getElementById('settings-x');
+        if (xInput) xInput.value = userProfileData.x || "";
+        
+        const readmeInput = document.getElementById('settings-readme');
+        if (readmeInput) readmeInput.value = userProfileData.readme || "";
+        
+        const avatarCircle = document.getElementById('settings-avatar-circle');
+        if (avatarCircle) {
+          const avatarId = userProfileData.avatarId || 1;
+          avatarCircle.innerHTML = AVATAR_SVGS[avatarId] || "U";
+        }
+      } catch (err) {
+        console.error("loadSettingsUI error:", err);
+      }
+    };
+
+    window.saveSettingsProfile = function(e) {
+      if (e) e.preventDefault();
+      
+      const firstName = document.getElementById('settings-first-name').value.trim();
+      const lastName = document.getElementById('settings-last-name').value.trim();
+      const username = document.getElementById('settings-username').value.trim();
+      const email = document.getElementById('settings-email').value.trim();
+      const phone = document.getElementById('settings-phone').value.trim();
+      const bio = document.getElementById('settings-bio').value.trim();
+      
+      // Read new fields
+      const gender = document.getElementById('settings-gender').value;
+      const locationVal = document.getElementById('settings-location').value.trim();
+      const birthday = document.getElementById('settings-birthday').value;
+      const education = document.getElementById('settings-education').value.trim();
+      const skills = document.getElementById('settings-skills').value.trim();
+      const github = document.getElementById('settings-github').value.trim();
+      const linkedin = document.getElementById('settings-linkedin').value.trim();
+      const xVal = document.getElementById('settings-x').value.trim();
+      const readme = document.getElementById('settings-readme').value.trim();
+      
+      const displayName = (firstName + ' ' + lastName).trim() || username || userProfileData.displayName;
+      
+      userProfileData.displayName = displayName;
+      userProfileData.contactEmail = email;
+      userProfileData.contactPhone = phone;
+      userProfileData.bio = bio;
+      userProfileData.gender = gender;
+      userProfileData.location = locationVal;
+      userProfileData.birthday = birthday;
+      userProfileData.education = education;
+      userProfileData.skills = skills;
+      userProfileData.github = github;
+      userProfileData.linkedin = linkedin;
+      userProfileData.x = xVal;
+      userProfileData.readme = readme;
+      
+      localStorage.setItem('vericode_profile', JSON.stringify(userProfileData));
+      
+      updateProfileUI();
+      if (typeof onProfileSaveTrigger === 'function') {
+        onProfileSaveTrigger();
+      }
+      
+      alert('Profile updated successfully!');
+    };
+
+    renderSettingsUI();
+    updateAnimationStyles();
+  </script>

@@ -1,0 +1,10 @@
+  <!-- Slide-out Drawer for Problem Details -->
+  <div id="problem-drawer" class="theme-settings-panel" style="display: none; position: fixed; right: 0; top: 0; bottom: 0; width: 420px; height: 100vh; border-radius: 0; border: none; border-left: 1px solid rgba(255,255,255,0.1); z-index: 10100; padding: 30px; box-shadow: -10px 0 40px rgba(0,0,0,0.6); overflow-y: auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 12px;">
+      <h3 id="drawer-title" style="font-size: 20px; color: var(--color-white); font-family: var(--font-display);">Problem Details</h3>
+      <button id="drawer-close" style="background: transparent; border: none; color: var(--color-gray-400); cursor: pointer; font-size: 24px; line-height: 1; outline: none;">&times;</button>
+    </div>
+    <div id="drawer-content" style="font-size: 13.5px; line-height: 1.6; color: var(--color-gray-300); font-family: var(--font-body);">
+      <!-- Populated dynamically -->
+    </div>
+  </div>
