@@ -19,9 +19,18 @@ function TeamCard({ member, featured }) {
         <span className="team-tenure">{member.tenure}</span>
         <p className="team-bio">{member.bio}</p>
         <div className="team-links">
-          <a href={member.links.linkedin} className="team-link" aria-label={`${member.name} on LinkedIn`}>in</a>
-          <a href={member.links.x} className="team-link" aria-label={`${member.name} on X`}>X</a>
-          <a href={member.links.email} className="team-link" aria-label={`Email ${member.name}`}>@</a>
+          {member.links.linkedin && (
+            <a href={member.links.linkedin} target="_blank" rel="noopener noreferrer" className="team-link" aria-label={`${member.name} on LinkedIn`}>in</a>
+          )}
+          {member.links.x && (
+            <a href={member.links.x} target="_blank" rel="noopener noreferrer" className="team-link" aria-label={`${member.name} on X`}>X</a>
+          )}
+          {member.links.github && (
+            <a href={member.links.github} target="_blank" rel="noopener noreferrer" className="team-link" aria-label={`${member.name} on GitHub`}>gh</a>
+          )}
+          {member.links.email && (
+            <a href={member.links.email} className="team-link" aria-label={`Email ${member.name}`}>@</a>
+          )}
         </div>
       </div>
     </article>

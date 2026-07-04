@@ -123,13 +123,13 @@ export const companyData = {
     engineering: [
       {
         id: "frontend",
-        name: "Team Member",
-        initials: "FE",
+        name: "Bryan Kwandou",
+        initials: "BK",
         role: "Frontend Engineer",
         tenure: "Interface & Experience",
-        bio: "Builds the workspace people actually touch every day — the layout, the motion, and the small details that make it feel fast.",
-        photo: "",
-        links: { linkedin: "#", x: "#", email: "#" }
+        bio: "Builds the workspace people actually touch every day — the layout, the motion, and the small details that make it feel fast. Handles the interface end to end, from the 3D scene down to the button you just hovered.",
+        photo: "/bryan-kwandou.jpeg",
+        links: { linkedin: "https://www.linkedin.com/in/bryankwandou/", x: "https://x.com/nayrbryanGaming", github: "https://github.com/nayrbryanGaming/" }
       },
       {
         id: "backend",
