@@ -1306,5 +1306,185 @@ footer {
   .team-card-inner::before { animation: none; }
 }
 
+/* =========================================================================
+   Waitlist Section
+   ========================================================================= */
+.waitlist-section {
+  position: relative;
+  padding: 160px 8vw 170px;
+  background: var(--color-black);
+  overflow: hidden;
+  border-top: 1px solid var(--color-gray-900);
+}
+
+/* Faint grid + a soft moving glow behind the headline */
+.waitlist-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(700px 400px at 50% 40%, #000 0%, transparent 75%);
+  mask-image: radial-gradient(700px 400px at 50% 40%, #000 0%, transparent 75%);
+  pointer-events: none;
+}
+.waitlist-glow {
+  position: absolute;
+  top: 8%;
+  left: 50%;
+  width: 620px;
+  height: 620px;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.10), transparent 62%);
+  filter: blur(10px);
+  pointer-events: none;
+  animation: waitlist-breathe 7s ease-in-out infinite;
+}
+@keyframes waitlist-breathe {
+  0%, 100% { opacity: 0.55; transform: translateX(-50%) scale(1); }
+  50% { opacity: 0.9; transform: translateX(-50%) scale(1.08); }
+}
+
+.waitlist-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.waitlist-eyebrow {
+  display: inline-block;
+  font-size: 12px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--color-gray-400);
+  padding: 7px 16px;
+  border: 1px solid var(--color-gray-800);
+  border-radius: 999px;
+  margin-bottom: 30px;
+}
+
+.waitlist-heading {
+  font-size: clamp(2.6rem, 6.5vw, 5rem);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  color: var(--color-white);
+  margin-bottom: 26px;
+}
+
+.waitlist-sub {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--color-gray-400);
+  max-width: 560px;
+  margin: 0 auto 40px;
+}
+
+/* Form */
+.waitlist-form-wrap {
+  max-width: 520px;
+  margin: 0 auto;
+}
+.waitlist-form {
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  border: 1px solid var(--color-gray-800);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.02);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.waitlist-form:focus-within {
+  border-color: var(--color-gray-500);
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.05);
+}
+.waitlist-form.has-error {
+  border-color: #b34a4a;
+  box-shadow: 0 0 0 4px rgba(179, 74, 74, 0.12);
+}
+.waitlist-input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--color-white);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  padding: 0 18px;
+}
+.waitlist-input::placeholder { color: var(--color-gray-600, #666); }
+
+.waitlist-button {
+  flex-shrink: 0;
+  border: 0;
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--color-black);
+  background: var(--color-white);
+  padding: 14px 28px;
+  border-radius: 999px;
+  transition: transform 0.2s ease, background 0.2s ease, opacity 0.2s ease;
+}
+.waitlist-button:hover { transform: translateY(-1px); background: var(--color-gray-200); }
+.waitlist-button:active { transform: translateY(0); }
+.waitlist-button:disabled { opacity: 0.6; cursor: default; }
+
+.waitlist-note {
+  margin-top: 16px;
+  font-size: 13px;
+  color: var(--color-gray-500);
+}
+.waitlist-note-error { color: #d98a8a; }
+
+/* Success state */
+.waitlist-success {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  text-align: left;
+  padding: 20px 24px;
+  border: 1px solid var(--color-gray-800);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.03);
+  animation: waitlist-pop 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes waitlist-pop {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.waitlist-check {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--color-white);
+  color: var(--color-black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.waitlist-check svg { width: 22px; height: 22px; }
+.waitlist-success-copy { display: flex; flex-direction: column; gap: 4px; }
+.waitlist-success-copy strong { color: var(--color-white); font-size: 1.05rem; }
+.waitlist-success-copy span { color: var(--color-gray-400); font-size: 0.9rem; line-height: 1.5; }
+.waitlist-success-copy b { color: var(--color-gray-200); font-weight: 600; }
+
+@media (max-width: 560px) {
+  .waitlist-section { padding: 110px 6vw 120px; }
+  .waitlist-form { flex-direction: column; border-radius: 20px; }
+  .waitlist-input { padding: 14px 18px; text-align: center; }
+  .waitlist-button { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .waitlist-glow { animation: none; }
+  .waitlist-success { animation: none; }
+}
+
 
 

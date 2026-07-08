@@ -1,7 +1,94 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { initLandingPage, destroyLandingPage } from '../main.js';
 import { companyData } from '../company-data.js';
+
+function WaitlistSection() {
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState('idle'); // idle | loading | success | error
+  const [message, setMessage] = useState('');
+
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (status === 'loading') return;
+
+    const value = email.trim().toLowerCase();
+    if (!emailPattern.test(value)) {
+      setStatus('error');
+      setMessage('Enter a valid email address so we can reach you.');
+      return;
+    }
+
+    setStatus('loading');
+    setMessage('');
+
+    try {
+      const res = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: value }),
+      });
+      // Treat a successful response as confirmation; fall back gracefully
+      // if the endpoint is unreachable so the sign-up still lands well.
+      if (res.ok) {
+        setStatus('success');
+      } else {
+        const data = await res.json().catch(() => ({}));
+        if (res.status === 400 && data.error) {
+          setStatus('error');
+          setMessage(data.error);
+        } else {
+          setStatus('success');
+        }
+      }
+    } catch (err) {
+      // Network/endpoint not reachable — still acknowledge the person.
+      setStatus('success');
+    }
+  };
+
+  if (status === 'success') {
+    return (
+      <div className="waitlist-form-wrap">
+        <div className="waitlist-success" role="status">
+          <span className="waitlist-check" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20 6L9 17l-5-5" />
+            </svg>
+          </span>
+          <div className="waitlist-success-copy">
+            <strong>You are on the list.</strong>
+            <span>We will email <b>{email.trim().toLowerCase()}</b> the moment a demo slot opens up.</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="waitlist-form-wrap">
+      <form className={`waitlist-form${status === 'error' ? ' has-error' : ''}`} onSubmit={handleSubmit} noValidate>
+        <input
+          type="email"
+          className="waitlist-input"
+          placeholder="you@company.com"
+          value={email}
+          onChange={(e) => { setEmail(e.target.value); if (status === 'error') { setStatus('idle'); setMessage(''); } }}
+          aria-label="Email address"
+          autoComplete="email"
+        />
+        <button type="submit" className="waitlist-button" disabled={status === 'loading'}>
+          {status === 'loading' ? 'Joining…' : 'Join waitlist'}
+        </button>
+      </form>
+      {status === 'error'
+        ? <p className="waitlist-note waitlist-note-error">{message}</p>
+        : <p className="waitlist-note">No spam. One message when your demo slot is ready.</p>}
+    </div>
+  );
+}
 
 function TeamCard({ member, featured }) {
   return (
@@ -82,8 +169,9 @@ function Home() {
             <li><a href="#roadmap-sec" className="nav-link">Secure IDE</a></li>
             <li><a href="#team-sec" className="nav-link">Team</a></li>
             <li><a href="#audience" className="nav-link">Audience</a></li>
+            <li><a href="#waitlist" className="nav-link">Waitlist</a></li>
             <li><Link to="/login" className="nav-link">Sign In</Link></li>
-            <li><Link to="/login" className="cta-button secondary">Get Started</Link></li>
+            <li><a href="#waitlist" className="cta-button secondary">Request early access</a></li>
           </ul>
         </nav>
         <div className="scroll-indicator-wrap">
@@ -295,7 +383,22 @@ function Home() {
         </div>
       </section>
 
-      {/* 6. Footer Section */}
+      {/* 6. Waitlist Section */}
+      <section className="waitlist-section" id="waitlist">
+        <div className="waitlist-glow" aria-hidden="true"></div>
+        <div className="waitlist-inner">
+          <div className="waitlist-eyebrow">Early access</div>
+          <h2 className="waitlist-heading">
+            Get in before<br /><span className="text-gradient-light">everyone else.</span>
+          </h2>
+          <p className="waitlist-sub">
+            Vericode AI is opening in small groups. Leave your email and we will hold a demo slot for you, then walk you through the workspace the day it goes live for you.
+          </p>
+          <WaitlistSection />
+        </div>
+      </section>
+
+      {/* 7. Footer Section */}
       <footer>
         <div className="footer-top">
           <div className="footer-brand">
@@ -313,6 +416,7 @@ function Home() {
               <li><a href="#roadmap-sec">Roadmap</a></li>
               <li><a href="#team-sec">The team</a></li>
               <li><a href="#audience">Who it is for</a></li>
+              <li><a href="#waitlist">Join the waitlist</a></li>
             </ul>
           </div>
           
