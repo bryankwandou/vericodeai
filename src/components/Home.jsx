@@ -125,6 +125,13 @@ function TeamCard({ member, featured }) {
 }
 
 function Home() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    document.body.classList.toggle('menu-locked', menuOpen);
+    return () => document.body.classList.remove('menu-locked');
+  }, [menuOpen]);
+
   useEffect(() => {
     const preloader = document.getElementById('preloader');
     if (preloader) {
@@ -174,10 +181,34 @@ function Home() {
             <li><a href="#waitlist" className="cta-button secondary">Request early access</a></li>
           </ul>
         </nav>
+
+        <button
+          type="button"
+          className={`nav-toggle${menuOpen ? ' open' : ''}`}
+          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen(v => !v)}
+        >
+          <span></span><span></span><span></span>
+        </button>
+
         <div className="scroll-indicator-wrap">
           <div className="scroll-indicator-bar" id="scroll-indicator"></div>
         </div>
       </header>
+
+      <div className={`mobile-menu${menuOpen ? ' open' : ''}`} onClick={() => setMenuOpen(false)}>
+        <ul>
+          <li><a href="#hero">Home</a></li>
+          <li><a href="#integrations-sec">Integrations</a></li>
+          <li><a href="#roadmap-sec">Secure IDE</a></li>
+          <li><a href="#team-sec">Team</a></li>
+          <li><a href="#audience">Audience</a></li>
+          <li><a href="#waitlist">Waitlist</a></li>
+          <li><Link to="/login">Sign In</Link></li>
+          <li><a href="#waitlist" className="mobile-menu-cta">Request early access</a></li>
+        </ul>
+      </div>
 
       {/* 2. Hero Section (Diagonal Split) */}
       <section className="hero" id="hero">
